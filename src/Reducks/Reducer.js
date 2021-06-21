@@ -1,5 +1,5 @@
 import * as Actions from './Actions';
-import {initialState} from './store/initialState';
+import {initialState} from '../store/initialState';
 
 export const UserReducer = (state = initialState.users,action) => {
     switch(action.type) {
