@@ -1,7 +1,10 @@
 export const initialState = {
-  users:{
+  products: {
+    
+  },
+  users: {
     isSignedIn: false,
     uid: "",
     username: "",
   }
-}
+};

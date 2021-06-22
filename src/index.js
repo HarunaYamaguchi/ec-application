@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import createStore from './store/Store';
+import createStore from './Reducks/store/Store';
 import { ConnectedRouter } from 'connected-react-router';
 import * as History from 'history';
 import App from './App';
