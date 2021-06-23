@@ -3,6 +3,11 @@ import {initialState} from '../store/initialState';
 
 export const UserReducer = (state = initialState.users,action) => {
     switch(action.type) {
+      case Actions.SIGN_UP :
+        return {
+          ...state,
+          userInfo:action.payload,
+        };
       case Actions.SIGN_IN :
         return {
           ...state,

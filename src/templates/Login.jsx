@@ -11,11 +11,8 @@ const Login = () => {
   // const history = useHistory();
   // const handlePage = (path) => history.push(path);
 
-  const { register,handleSubmit,watch,formState:{ errors } } = useForm();
-
+  const { register,handleSubmit,formState:{ errors } } = useForm();
   const onSubmit = data => console.log(data);
-  // const mail = watch('mail')
-  // console.log(mail);
   
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
