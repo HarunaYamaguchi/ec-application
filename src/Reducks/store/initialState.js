@@ -1,6 +1,6 @@
 export const initialState = {
   products: {
-    lists:[]
+    list:[]
   },
   users: {
     isSignedIn: false,

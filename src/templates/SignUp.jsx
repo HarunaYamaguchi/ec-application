@@ -1,9 +1,10 @@
 import React,{useCallback,useState} from "react";
-// import TextInput from "../UIKit/textInput";
+import TextInput from "../UIKit/textInput";
 import { useForm,Controller } from "react-hook-form";
 import TextField from '@material-ui/core/TextField';
 import { signUp } from "../Reducks/users/Operations";
 import { useDispatch } from "react-redux";
+import {push} from 'connected-react-router'
 
 const SignUp  = () => {
 
@@ -66,23 +67,24 @@ const SignUp  = () => {
         helperText={errors.title && "タイトルは20文字以内にして下さい。"}
       />  */}
 
-      <TextField
+      <TextInput
         fullWidth={true} label={'メールアドレス'} multiline={false} required={true}
         value={email} type={'email'} onChange={inputEmail}
        />
 
-      <TextField
+      <TextInput
         fullWidth={true} label={'パスワード'} multiline={false} required={true}
         value={password} type={'password'} onChange={inputPassWord}
        />
 
-      <TextField
+      <TextInput
         fullWidth={true} label={'パスワード確認用'} multiline={false} required={true}
         value={confirmPassword} type={'password'} onChange={inputConfirmPassword}
        />
 
          <div>
          <button type="submit" onClick={() => dispatch(signUp(username,email,password,confirmPassword))}>アカウント登録</button>
+         <p onClick={() => dispatch(push('login'))}>アカウントをお持ちの方はこちら</p>
        </div>
     </form>
   )

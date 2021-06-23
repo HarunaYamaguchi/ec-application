@@ -15,7 +15,8 @@ service cloud.firestore {
       allow create;
       }
       match/products/{productId}{
-      allow read,write;
+      allow read:if request.auth.uid != null;
+      allow write:if request.auth.uid != null;
       }
 
     }

@@ -4,6 +4,32 @@ import { signInAction,signOutAction,signUpAction } from "./Actions";
 import {auth,db,FirebaseTimestamp} from '../../firebase/index'
 import { push } from 'connected-react-router';
 
+export const listenAuthState = () => {
+    return async (dispatch) => {
+      return auth.onAuthStateChanged(user => {
+        if(user) {
+          const uid = user.uid
+
+            db.collection('users').doc(uid).collection('userInfo').get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                const data = doc.data()
+
+                dispatch(signInAction({
+                  isSignedIn:true,
+                  uid:uid,
+                  username:data.username,
+                }))
+              })
+            })
+        } else {
+          dispatch(push('/login'))
+        }
+      })
+    }
+}
+
+
 export const signIn = (email,password) => {
     return async (dispatch) => {
       auth.signInWithEmailAndPassword(email,password)
@@ -52,7 +78,6 @@ export const signUp = (username,email,password) => {
             db.collection(`users/${uid}/userInfo`).doc().set(userInitialData)
             .then(async () => {
               dispatch(push('/'))
-              
             });
           }
             dispatch(signUpAction(username, email, password));
@@ -64,12 +89,12 @@ export const signOut = () => {
   return async (dispatch) => {
     auth
       .signOut()
-      .then(() => {
-        dispatch(signOutAction());
-      })
-      // .catch(() => {
-      //   throw new Error('ログアウトに失敗しました。');
-      // });
+        .then(() => {
+          dispatch(signOutAction());
+        })
+      .catch(() => {
+        throw new Error('ログアウトに失敗しました。');
+      });
     dispatch(push('/login'));
   };
 };
