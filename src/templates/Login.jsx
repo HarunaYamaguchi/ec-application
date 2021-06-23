@@ -11,8 +11,11 @@ const Login = () => {
   // const history = useHistory();
   // const handlePage = (path) => history.push(path);
 
-  const { register,handleSubmit,formState:{ errors } } = useForm();
+  const { register,handleSubmit,watch,formState:{ errors } } = useForm();
   const onSubmit = data => console.log(data);
+
+  const mail = watch("mail");
+  console.log(mail)
   
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -20,33 +23,33 @@ const Login = () => {
         ・メールアドレス<input name="mail"
         {...register("mail",{
           id:"mail",
-          required:true,
+          required: "メールアドレスが入力されていません",
           pattern:{
             value:/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
             message:'メールアドレスを正しく入力してください'
           },
         })}
         />
-        {errors.mail && errors.mail.message}
+        {errors.mail && "メールアドレスが入力されていません"}
 
         ・パスワード<input name="password"
         {...register("password",{
           id:'password',
-          repuired:"パスワードが入力されていません",
+          required:"パスワードが入力されていません",
           minLength: {
             value:8,
           message:'8文字以上で入力してください'
           }
-          })}
+        })}
           />
         {errors.password && errors.password.message}
 
         <input type="submit" 
-        onClick={(e) => {
-          e.preventDefault()
-        //   dispatch(signInAction({ uid:'00001'}))
-        }
-          } 
+          // onClick={(e) => {
+            // dispatch(signInAction({ uid:'00001'}))
+            // handlePage('/')
+          // }
+        // } 
           /> 
     </form>
   )
