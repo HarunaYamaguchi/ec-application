@@ -1,3 +1,21 @@
+export const FETCH_ORDERS = "FETCH_ORDERS";
+
+export const fetchOrdersAction = (orders) => {
+  return {
+    type:"FETCH_ORDERS",
+    payload: orders
+  }
+}
+
+export const FETCH_CART = "FETCH_CART";
+
+export const fetchCartAction = (cartList) => {
+  return {
+    type: "FETCH_CART",
+    payload: cartList
+  }
+}
+
 export const SIGN_UP = "SIGN_UP";
 
 export const signUpAction = (username,email,password) => {

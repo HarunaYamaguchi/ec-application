@@ -14,7 +14,11 @@ const Auth = ({children}) => {
     }
   },[dispatch,isSignedIn]);
 
-  return children
+  if (!isSignedIn) {
+    return <></>
+    } else {
+      return children
+    }
 };
 
 export default Auth;

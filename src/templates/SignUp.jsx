@@ -1,6 +1,6 @@
 import React,{useCallback,useState} from "react";
 import TextInput from "../UIKit/textInput";
-import { useForm,Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import TextField from '@material-ui/core/TextField';
 import { signUp } from "../Reducks/users/Operations";
 import { useDispatch } from "react-redux";

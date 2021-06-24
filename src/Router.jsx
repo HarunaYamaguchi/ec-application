@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
-import {Login,SignUp,ProductEdit,Home} from './templates';
-import Auth from './Auth';
+import {Login,SignUp,ProductList,ProductEdit,Home, ProductDetail} from './templates';
+// import Auth from './Auth';
 
 const Router = () => {
     return (
@@ -9,10 +9,12 @@ const Router = () => {
         <Route exact path='/signup' component={SignUp} />
         <Route exact path='/login' component={Login} />
         
+          <Route exact path='/productdetail' component={ProductDetail}/>
+          <Route exact path='/productlist' component={ProductList}/> 
           <Route exact path='/product/edit' component={ProductEdit}/> 
-          <Auth>
+          {/* <Auth> */}
           <Route exact path='(/)?' component={Home} />
-        </Auth>
+        {/* </Auth> */}
       </Switch>
     )
 }

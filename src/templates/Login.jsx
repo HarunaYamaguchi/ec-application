@@ -1,22 +1,25 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-// import { signInAction } from '../Reducks/users/Actions';
+import React,{useState} from 'react';
+import { useCallback } from 'react';
+import { useDispatch} from 'react-redux';
 import { useForm } from "react-hook-form";
-import {push} from 'connected-react-router'
+import { signIn } from '../Reducks/users/Operations';
 
 const Login = () => {
   const dispatch = useDispatch();
-  // const selector = useSelector(state => state)
-  // console.log(selector.users)
-  // const history = useHistory();
-  // const handlePage = (path) => history.push(path);
 
-  const { register,handleSubmit,watch,formState:{ errors } } = useForm();
+  const [mail, setMail] = useState("")
+  const [password, setPassword] = useState("")
+
+    const inputEmail = useCallback((e) => {
+        setMail(e.target.value)
+    },[]);
+
+    const inputPassword = useCallback((e) => {
+        setPassword(e.target.value)
+    },[]);
+
+  const { register,handleSubmit,formState:{ errors } } = useForm();
   const onSubmit = data => console.log(data);
-
-  const mail = watch("mail");
-  console.log(mail)
   
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -47,10 +50,8 @@ const Login = () => {
 
         <input type="submit" 
           onClick={() => {
-            // dispatch(signInAction({ uid:'00001'}))
-            dispatch(push('/'))
-          }
-        } 
+            dispatch(signIn(mail,password))}
+        }
           /> 
     </form>
   )
