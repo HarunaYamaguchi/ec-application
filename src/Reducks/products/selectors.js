@@ -7,3 +7,9 @@ export const getProducts = createSelector(
     return state.list;
   }
 )
+
+export const getSumPrice = createSelector(
+  [productsSelector],(state) => {
+    return state.sumPrice;
+  }
+)

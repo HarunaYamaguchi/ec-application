@@ -5,5 +5,6 @@ export const initialState = {
     uid: "",
     username: "",
     orders:[],
-  }
+  },
+  sumPrice:'',
 };

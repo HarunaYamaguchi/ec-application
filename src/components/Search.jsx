@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
+import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,9 +35,7 @@ const Search = () =>  {
 
   return (
     <Paper component="form" className={classes.root}>
-      <IconButton className={classes.iconButton} aria-label="search">
-        <MenuIcon />
-      </IconButton>
+      <IconButton className={classes.iconButton} aria-label="search"></IconButton>
       <InputBase
         className={classes.input}
         placeholder="商品を検索"
@@ -49,12 +48,12 @@ const Search = () =>  {
       </IconButton>
 
       <Divider className={classes.divider} orientation="vertical" />
-      <IconButton color="primary" className={classes.iconButton} 
+      <HighlightOffRoundedIcon className={classes.iconButton} 
         aria-label="directions"
         onClick = {() => {setText('')}}
         >
         <DirectionsIcon />
-      </IconButton>
+      </HighlightOffRoundedIcon>
     </Paper>
   );
 }

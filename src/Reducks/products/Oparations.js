@@ -1,8 +1,14 @@
 import { db,FirebaseTimestamp } from "../../firebase"
 import { push } from "connected-react-router"
-import { fetchProductsAction } from './Actions';
+import { fetchProductsAction, fetchSumPriceAction } from './Actions';
 
 const productsRef = db.collection('products')
+
+export const fetchSumPrice = (sumPrice) => {
+  return (dispatch) =>{
+    dispatch(fetchSumPriceAction(sumPrice))
+  };
+};
 
 export const fetchProducts = () => {
   return async (dispatch) => {

@@ -12,14 +12,18 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Search from '../components/Search';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(((theme) => ({
   root: {
-    maxWidth: 345,
+    maxWidth: 370,
+    margin: 20,
   },
-  media: {
-    height: 140,
+  flex: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
-});
+})
+))
 
 const ProductList = () => {
   const [inputText, setInputText] = useState('')
@@ -36,30 +40,29 @@ const ProductList = () => {
      dispatch(fetchProducts())
    },[dispatch]);
 
-   
 
-  //  const filterAlert = () => {
-  //    alert('該当商品はありません');
-  //    setInputText('');
-  //  }
+   const filterAlert = () => {
+     alert('該当商品はありません');
+     setInputText('');
+   }
 
    if(products !== undefined){
      showProducts = products.filter((product) => 
        product.name.indexOf(inputText) !== -1
-     )
+     );
    }
 
     return (
       <>
-        <div>
-          <Search setText={setInputText}/>
+      <Search setText={setInputText}/>
+        <div className={classes.flex}>
           {products === undefined 
           ? ''
           : showProducts.length !== 0 
           ? showProducts.map((product) => {
             return (
               <Link
-                  to={{ pathname: '/itemdetail', selectedItemId: product.id }}
+                  to={{ pathname: '/productdetail', selectedItemId: product.id }}
                   key={product.id}
                 >
               <Card className={classes.root}>
@@ -83,7 +86,7 @@ const ProductList = () => {
               </Link>
             );
           })
-          : <h2>商品一覧表示</h2>}
+          : filterAlert()}
         </div>
       </>
     );

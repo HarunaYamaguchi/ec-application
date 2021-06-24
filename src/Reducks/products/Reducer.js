@@ -8,6 +8,11 @@ export const ProductsReducer = (state = initialState.products, action) => {
                 ...state,
                 list:[...action.payload]
             };
+        case Actions.FETCH_SUM_PRICE:
+            return {
+                ...state,
+                sumPrice:[...action.payload]
+            };
         default:
           return state;
     }
