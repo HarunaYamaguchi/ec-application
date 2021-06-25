@@ -73,40 +73,40 @@ const Header = () => {
               {username}さん
             </Typography>
             <div>
-              {/* {!uid ? (
+              {!uid ? (
                 ''
-              ):( */}
+              ):(
                 <IconButton aria-label="shopping-cart" color="inherit"
                 onClick={() => {handleLink('/cartList')}}
                 >
                 <ShoppingCartRoundedIcon />
                 </IconButton>
-              {/* )}
+             )}
               {!uid ? (
                 ''
-              ):( */}
+              ):( 
                 <IconButton aria-label="shopping-cart" color="inherit"
                 onClick={() => {handleLink('/orderLog')}}
                 >
               <ShopIcon/>
                 </IconButton>
-              {/* )} */}
+              )} 
             </div>
-            {/* {!uid ?  ( */}
+              {!uid ?  ( 
               <div>
                 <Button variant="outlined" color="secondary"
                   onClick={()=>{handleLink('/login')}}>
                   ログイン
                 </Button>
               </div>
-              {/* / ):( */}
+               ):( 
               <div>
                 <Button variant="outlined"
                   onClick={() => dispatch(signOut())}>
                   ログアウト
                 </Button>
               </div>
-             {/* )} */}
+              )}
         </Toolbar>
       </AppBar>
     </div>
