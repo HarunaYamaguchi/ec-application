@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Search = () =>  {
+const Search = (props) =>  {
   const [text, setText] = useState('')
   const classes = useStyles();
 
@@ -43,7 +43,12 @@ const Search = () =>  {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <IconButton type="submit" className={classes.iconButton} aria-label="search">
+      <IconButton type="submit" className={classes.iconButton} 
+        onClick={() => {
+          props.setText(text)
+          setText('')
+        }}
+      aria-label="search">
         <SearchIcon />
       </IconButton>
 

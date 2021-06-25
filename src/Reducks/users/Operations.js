@@ -48,6 +48,7 @@ export const signIn = (email,password) => {
                   uid:userId,
                   username:data.username,
                 }))
+                
                 dispatch(push('/'))
               })
             })

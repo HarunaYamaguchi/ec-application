@@ -1,11 +1,15 @@
 import React from "react";
 import Router from './Router';
+import {Header} from './components/index'
 
 const App = () =>  {
   return (
-    <div>
-      <Router />
-    </div>
+    <>
+      <Header/>
+        <div>
+          <Router />
+        </div>
+    </>
   );
 }
 

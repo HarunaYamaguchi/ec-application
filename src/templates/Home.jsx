@@ -12,8 +12,6 @@ const Home = () =>{
   return (
     <div>
       <h2>ホーム画面</h2>
-      <p>{uid}</p>
-      <p>{username}</p>
       <button onClick={() => dispatch(signOut())}>SIGN OUT</button>
     </div>
   )
