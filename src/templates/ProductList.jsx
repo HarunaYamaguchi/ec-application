@@ -22,6 +22,10 @@ const useStyles = makeStyles(((theme) => ({
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
+  image: {
+    width: 200,
+    height:150
+  }
 })
 ))
 
@@ -29,7 +33,7 @@ const ProductList = () => {
   const [inputText, setInputText] = useState('')
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-  const products = getProducts(selector);
+  const products = getProducts(selector); //商品情報
   const uid = getUserId(selector);
   const classes = useStyles();
 
@@ -42,7 +46,7 @@ const ProductList = () => {
 
 
    const filterAlert = () => {
-     alert('該当商品はありません');
+     alert('該当の商品はありません');
      setInputText('');
    }
 
@@ -54,7 +58,7 @@ const ProductList = () => {
 
     return (
       <>
-      <Search setText={setInputText}/>
+      <Search setText={setInputText} />
         <div className={classes.flex}>
           {products === undefined 
           ? ''

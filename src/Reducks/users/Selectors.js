@@ -7,7 +7,7 @@ export const getOrder = createSelector(
   (state) => state.orders
 );
 
-export const getInCart = createSelector(
+export const getProductInCart = createSelector(
   [usersSelector],
   (state) => state.cartList
 );

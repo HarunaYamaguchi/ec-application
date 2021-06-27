@@ -1,6 +1,7 @@
-import { db,FirebaseTimestamp } from "../../firebase"
+import {db,FirebaseTimestamp} from '../../firebase/index'
 import { push } from "connected-react-router"
 import { fetchProductsAction, fetchSumPriceAction } from './Actions';
+import firebase from 'firebase';
 
 const productsRef = db.collection('products')
 
@@ -12,7 +13,7 @@ export const fetchSumPrice = (sumPrice) => {
 
 export const fetchProducts = () => {
   return async (dispatch) => {
-    productsRef.orderBy('id', 'asc').get()
+    productsRef.orderBy('id', 'asc').get() //id、昇順
     .then((snapshots) => {
       const productList = [];
       snapshots.forEach((snapshots) => {
@@ -51,3 +52,51 @@ export const saveProduct = (name,description, category,price) => {
           // })
     }
 }
+
+export const addOrdersInfo = (selectedId, uid, num, labelName, carts) => {
+  return async (dispatch) => {
+    const ordersRef = db.collection('users').doc('userId').collection('orders');
+    console.log(uid)
+
+    if(carts === undefined){
+      const ref = ordersRef.doc();
+      const id = ref.id
+      
+      ordersRef.doc(id).set({
+        orderId: id,
+        itemInfo: [
+          {
+            id: id,
+            itemId: selectedId,
+            itemNum: Number(num),
+            itemKind: Number(labelName)
+          },
+        ],
+        status: 0,
+    });
+    console.log(num)
+  } else {
+    let statusZero = [];
+    const ref = ordersRef.doc();
+    const id = ref.id;
+
+    ordersRef
+      .where('status', '==', 0) //配列の検索
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          statusZero.push(doc.data().orderId);
+        });
+        const statusZeroRef = ordersRef.doc(statusZero[0]);
+        statusZeroRef.update({
+            itemInfo: firebase.firestore.FieldValue.arrayUnion({ //要素の追加
+              id: id,
+              itemId: selectedId,
+              itemNum: Number(num),
+              itemKind: Number(labelName)
+            }),
+          });
+        });
+    }
+  };
+};

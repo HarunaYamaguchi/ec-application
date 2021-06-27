@@ -5,21 +5,25 @@ import {
   SignUp, 
   ProductList, 
   ProductEdit,
-  ProductDetail
+  ProductDetail,
+  // ItemDetail
 } from './templates';
-// import Auth from './Auth';
+import Auth from './Auth';
+import CartList from './templates/CartList';
 
 const Router = () => {
     return (
       <Switch>
         <Route exact path='/signup' component={SignUp} />
         <Route exact path='/login' component={Login} />
-        
-          <Route exact path='/productdetail' component={ProductDetail}/>
-          <Route exact path='/product/edit' component={ProductEdit}/> 
-          {/* <Auth> */}
-          <Route exact path='(/)?' component={ProductList} />
-        {/* </Auth> */}
+
+          <Auth>
+            <Route exact path='/cartlist' component={CartList}/>
+            <Route exact path='/productdetail' component={ProductDetail}/>
+            {/* <Route exact path='/product/:id' component={ItemDetail}/> */}
+            <Route exact path='/product/edit' component={ProductEdit}/> 
+            <Route exact path='(/)?' component={ProductList} />
+          </Auth>
       </Switch>
     )
 }

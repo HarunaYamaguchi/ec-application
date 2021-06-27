@@ -16,3 +16,11 @@ export const fetchSumPriceAction = (sumPrice) => {
   };
 };
 
+export const ADD_ORDERS_INFO = "ADD_ORDERS_INFO";
+
+export const addOrdersInfo = (selectedId,labelName,num) => {
+  return {
+    type: "ADD_ORDERS_INFO",
+    payload: [selectedId,labelName,num]
+  }
+}
