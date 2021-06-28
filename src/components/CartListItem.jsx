@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { getOrders } from '../Reducks/users/Selectors';
-import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import {makeStyles} from "@material-ui/core/styles";
 import RegisterButton from '../UIKit/Button';
@@ -27,10 +26,16 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
   },
+  image: {
+    objectFit: 'cover',
+    margin: 16,
+    height: 96,
+    width: 96
+  },
 }));
 
 
-const CartList = () => {
+const CartListItem = () => {
   const classes = useStyles();
   const dispatch = useDispatch()
   const selector = useSelector((state) => state);
@@ -39,7 +44,6 @@ const CartList = () => {
   const products = getProducts(selector);
   const uid = getUserId(selector);
   // const [totalPrice, setTotalPrice] = useState('')
-  const handleLink = (path) => history.push(path)
 
  useEffect(() => {
    dispatch(fetchCart(uid))
@@ -55,7 +59,6 @@ useEffect(() => {
 
   return (
     <div className='cartList'>
-      <h2 align='center'>ショッピングカート</h2>
         {orders === undefined ? (
           ''
          ) : orders.filter((el) => el.status === 0) === 0
@@ -117,11 +120,6 @@ useEffect(() => {
                                         {(product.price * itemInfos.itemNum).toLocaleString()}円
                                       </div>
                                     </TableCell>
-                                    <TableCell align="center">
-                                      <div>
-                                        <Button>削除</Button>
-                                      </div>
-                                    </TableCell>
                                   </TableRow>
                                 );
                               });
@@ -133,13 +131,11 @@ useEffect(() => {
               </Table>
             </TableContainer>
           </div>
-          <div>
-            <RegisterButton label={'注文確認画面へ進む'} onClick={() => {handleLink('/orderconfirm')}} />
-          </div>
         </div>
       )}
     </div>
   );
 };
 
-export default CartList;
+export default CartListItem;
+

@@ -2,7 +2,7 @@ import React,{useCallback,useState} from 'react';
 import { useDispatch } from 'react-redux';
 import {TextInput,SelectBox} from '../UIKit';
 import RegisterButton from '../UIKit/Button';
-import { saveProduct } from '../Reducks/products/Oparations';
+// import { saveProduct } from '../Reducks/products/Oparations';
 
 const ProductEdit = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const ProductEdit = () => {
          <div>
            <RegisterButton 
              label={'商品登録'}
-             onClick={() => dispatch(saveProduct(name,description,category,price))}
+            //  onClick={() => dispatch(saveProduct(name,description,category,price))}
            />
          </div>
       </div>

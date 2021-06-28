@@ -4,12 +4,14 @@ import {
   Login, 
   SignUp, 
   ProductList, 
-  ProductEdit,
+  // ProductEdit,
   ProductDetail,
-  // ItemDetail
+  CartList,
+  OrderConfirm,
+  OrderFinished,
+  OrderLog
 } from './templates';
 import Auth from './Auth';
-import CartList from './templates/CartList';
 
 const Router = () => {
     return (
@@ -18,10 +20,12 @@ const Router = () => {
         <Route exact path='/login' component={Login} />
 
           <Auth>
-            <Route exact path='/cartlist' component={CartList}/>
-            <Route exact path='/productdetail' component={ProductDetail}/>
-            {/* <Route exact path='/product/:id' component={ItemDetail}/> */}
-            <Route exact path='/product/edit' component={ProductEdit}/> 
+            <Route exact path='/orderlog' component={OrderLog} />
+            <Route exact path='/orderfinished' component={OrderFinished} />
+            <Route exact path='/orderconfirm' component={OrderConfirm} />
+            <Route exact path='/cartlist' component={CartList} />
+            <Route exact path='/productdetail' component={ProductDetail} />
+            {/* <Route exact path='/product/edit' component={ProductEdit} />  */}
             <Route exact path='(/)?' component={ProductList} />
           </Auth>
       </Switch>

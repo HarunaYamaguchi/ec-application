@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {Link} from 'react-router-dom'
 import { fetchProducts } from '../Reducks/products/Oparations';
 import { getProducts } from '../Reducks/products/selectors';
-import { getUserId } from '../Reducks/users/Selectors';
+// import { getUserId } from '../Reducks/users/Selectors';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -34,7 +34,7 @@ const ProductList = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector); //商品情報
-  const uid = getUserId(selector);
+  // const uid = getUserId(selector);
   const classes = useStyles();
 
   let showProducts = [];

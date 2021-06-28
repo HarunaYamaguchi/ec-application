@@ -6,7 +6,7 @@ export const UserReducer = (state = initialState.users,action) => {
       case Actions.FETCH_ORDERS :
         return {
           ...state,
-          order:[...action.payload]
+          orders:[...action.payload]
         };
       case Actions.FETCH_CART:
         return {

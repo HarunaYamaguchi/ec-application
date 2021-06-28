@@ -11,12 +11,12 @@ export const ProductsReducer = (state = initialState.products, action) => {
         case Actions.FETCH_SUM_PRICE:
             return {
                 ...state,
-                sumPrice:[...action.payload]
+                sumPrice: action.payload
             };
         case Actions.ADD_ORDERS_INFO:
             return {
                 ...state,
-                ordersInfo: [...action.payload]
+                ordersInfo: action.payload
             };
         default:
           return state;

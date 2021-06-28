@@ -1,4 +1,4 @@
-import { fetchCartAction, signInAction,signOutAction,signUpAction } from "./Actions";
+import { fetchCartAction, fetchOrdersAction, signInAction,signOutAction,signUpAction } from "./Actions";
 // import { useDispatch } from 'react-redux';
 // import { useHistory } from 'react-router';
 import {auth,db,FirebaseTimestamp} from '../../firebase/index'
@@ -52,9 +52,9 @@ export const signIn = (email,password) => {
                 const data = doc.data()
 
                 dispatch(signInAction({
-                  isSignedIn:true,
+                  isSignedIn: true,
                   uid: userId,
-                  username:data.username,
+                  username: data.username,
                 }))
                 dispatch(push('/'))
               })
@@ -105,21 +105,35 @@ export const listenAuthState = () => {
 }
 
 export const fetchCart = (uid) => {
-  return async (dispatch) =>{
+  return async (dispatch) => {
     const cartList = []
 
     if (uid) {
-      const orderRef = db.collection('users').doc('uid').collection('order');
+      const ordersRef = db.collection('users').doc(uid).collection('orders');
 
-      orderRef.where('status', '==', 0)
+      ordersRef.where('status', '==', 0)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           cartList.push(doc.data());
         });
-        dispatch(fetchCartAction(cartList))
+        dispatch(fetchCartAction(cartList));
       });
     }
   };
 };
 
+export const fetchOrders = (uid) => {
+  const ordersRef = db.collection('users').doc(uid).collection('orders');
+
+  return async (dispatch) => {
+    ordersRef.get().then((snapshots) => {
+      const orderList = [];
+      snapshots.forEach((snapshot) => {
+        const order = snapshot.data();
+        orderList.push(order)
+      });
+      dispatch(fetchOrdersAction(orderList));
+    })
+  }
+}

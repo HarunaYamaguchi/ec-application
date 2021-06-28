@@ -1,23 +1,24 @@
-import React,{useMemo} from 'react';
-import { getProductInCart } from '../Reducks/users/Selectors';
+import React from 'react';
 // import { makeStyles } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { RegisterButton } from '../UIKit';
+import { useHistory } from 'react-router';
+import CartListItem from '../components/CartListItem';
 
 const OrderConfirm = () => {
   // const classes = useStyles()
-  const dispatch = useDispatch();
-  const selector = useSelector(state => state);
-  const productInCart = getProductInCart(selector)
-
-  // const shoppingPostage = useMemo(() => ()) 
-
-  // const subtotal = useMemo(() => {
-  //   return productInCart.reduce((sum, product) => sum += product.price, 0)
-  // }, [productInCart])
+  const history = useHistory();
+  const handleLink = (path) => history.push(path)
 
   return (
-    <h2>注文の確認</h2>
+    <div>
+      <h2 align='center'>注文の確認</h2>
+      <div>
+        <CartListItem />
+      </div>
+      <div>
+        <RegisterButton label={'注文確定'} onClick={() => {handleLink('/orderfinished')}} />
+      </div>
+    </div>
   )
 }
 

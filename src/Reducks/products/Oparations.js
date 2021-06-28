@@ -1,5 +1,6 @@
-import {db,FirebaseTimestamp} from '../../firebase/index'
-import { push } from "connected-react-router"
+import {db} from '../../firebase/index'
+// import {FirebaseTimestamp} from '../../firebase/index'
+// import { push } from "connected-react-router"
 import { fetchProductsAction, fetchSumPriceAction } from './Actions';
 import firebase from 'firebase';
 
@@ -25,37 +26,38 @@ export const fetchProducts = () => {
   };
 };
 
-export const saveProduct = (name,description, category,price) => {
-    return async (dispatch) => {
-        const timestamp = FirebaseTimestamp.now() //現在のサーバーの時刻
+// export const saveProduct = (name,description, category,price) => {
+//     return async (dispatch) => {
+//         const timestamp = FirebaseTimestamp.now() //現在のサーバーの時刻
 
-        const data = {
-          category: category,
-          description: description,
-          name:name,
-          price: parseInt(price, 10), //文字列を10進数に変換
-          updated_at: timestamp
-        }
+//         const data = {
+//           category: category,
+//           description: description,
+//           name:name,
+//           price: parseInt(price, 10), //文字列を10進数に変換
+//           updated_at: timestamp
+//         }
 
-          const ref = productsRef.doc()
-          const id = ref.id //firestoreが自動で採番してくれたIDを取得
-          data.id = id
-          data.created_at = timestamp;
+//           const ref = productsRef.doc()
+//           const id = ref.id //firestoreが自動で採番してくれたIDを取得
+//           data.id = id
+//           data.created_at = timestamp;
 
 
-        return productsRef.doc(id).set(data)
-          .then(() => {
-            dispatch(push('/'))
-          })
+//         return productsRef.doc(id).set(data)
+//           .then(() => {
+//             dispatch(push('/'))
+//           })
           // .catch((error) => {
           //   throw new Error(error)
           // })
-    }
-}
+//     }
+// }
 
 export const addOrdersInfo = (selectedId, uid, num, labelName, carts) => {
   return async (dispatch) => {
-    const ordersRef = db.collection('users').doc('userId').collection('orders');
+
+    const ordersRef = db.collection('users').doc(uid).collection('orders');
     console.log(uid)
 
     if(carts === undefined){
@@ -87,6 +89,7 @@ export const addOrdersInfo = (selectedId, uid, num, labelName, carts) => {
         querySnapshot.forEach((doc) => {
           statusZero.push(doc.data().orderId);
         });
+
         const statusZeroRef = ordersRef.doc(statusZero[0]);
         statusZeroRef.update({
             itemInfo: firebase.firestore.FieldValue.arrayUnion({ //要素の追加
