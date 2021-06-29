@@ -2,7 +2,7 @@ import React,{ useState } from 'react';
 import { useCallback } from 'react';
 import { useDispatch} from 'react-redux';
 import { useHistory } from 'react-router';
-// import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { signIn } from '../Reducks/users/Operations';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -49,8 +49,8 @@ const Login = () => {
         setPassword(e.target.value)
     },[setPassword]);
 
-  // const { register,handleSubmit,formState:{ errors } } = useForm();
-  // const onSubmit = data => console.log(data);
+  const { register,handleSubmit,formState:{ errors } } = useForm();
+  const onSubmit = data => console.log(data);
   
   return (
     <Container component="main" maxWidth="xs">
@@ -60,45 +60,54 @@ const Login = () => {
         ログイン
       </Typography>
       <div className={classes.form} noValidate>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-          autoFocus
-          value={email}
-          onChange={inputEmail}
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={inputPassword}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={() => {
-            //e.preventDefault();
-            dispatch(signIn(email, password));
-          }}
-        >
-          ログイン
-        </Button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={inputEmail}
+            id='mail'
+            label='メールアドレス'
+            style={{width:300}}
+            name='mail'
+            {...register('mail',{
+              required:'メールアドレスを入力してください',
+              pattern: {
+                value:/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
+                message:'メールアドレスを正しく入力してください'
+              }
+            })}
+            helperText={errors.mail && errors.mail.message}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={inputPassword}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={() => {
+              //e.preventDefault();
+              dispatch(signIn(email, password));
+            }}
+          >
+            ログイン
+          </Button>
+        </form>
       </div>
       <Link to="/signup"
         onClick={() => { handlePage('/signup'); }}
@@ -108,22 +117,6 @@ const Login = () => {
     </div>
   </Container>
 );
-
-
-
-    // <form onSubmit={handleSubmit(onSubmit)}>
-    //   <h2>ログイン</h2>
-    //     ・メールアドレス<input name="mail"
-    //     {...register("mail",{
-    //       id:"mail",
-    //       required: "メールアドレスが入力されていません",
-    //       pattern:{
-    //         value:/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-    //         message:'メールアドレスを正しく入力してください'
-    //       },
-    //     })}
-    //     />
-    //     {errors.mail && "メールアドレスが入力されていません"}
 
     //     ・パスワード<input name="password"
     //     {...register("password",{

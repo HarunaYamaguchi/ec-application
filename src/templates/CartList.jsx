@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { getOrders } from '../Reducks/users/Selectors';
-import { Button } from '@material-ui/core';
-import { useHistory } from 'react-router';
+import { useHistory,useLocation } from 'react-router';
 import {makeStyles} from "@material-ui/core/styles";
 import RegisterButton from '../UIKit/Button';
 import Table from '@material-ui/core/Table';
@@ -13,7 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { getProducts } from '../Reducks/products/selectors';
-import { fetchCart } from '../Reducks/users/Operations';
+import { DeleteOrder, fetchCart } from '../Reducks/users/Operations';
 import { getUserId } from '../Reducks/users/Selectors';
 import { fetchProducts } from '../Reducks/products/Oparations';
 import { fetchOrders } from '../Reducks/users/Operations';
@@ -35,10 +34,11 @@ const CartList = () => {
   const dispatch = useDispatch()
   const selector = useSelector((state) => state);
   const history = useHistory();
+  const location = useLocation();
   const orders = getOrders(selector);
   const products = getProducts(selector);
   const uid = getUserId(selector);
-  // const [totalPrice, setTotalPrice] = useState('')
+  const [totalPrice, setTotalPrice] = useState(0)
   const handleLink = (path) => history.push(path)
 
  useEffect(() => {
@@ -52,6 +52,31 @@ useEffect(() => {
 useEffect(() => {
   dispatch(fetchOrders(uid))
 },[dispatch,orders,uid])
+
+const createTotalPrice = () =>  {
+  let priceTotal = 0;
+  const filterOrder = orders.filter((order) => order.status === 0);
+
+  filterOrder.forEach((item) => {
+    item.itemInfo.forEach((el) => {
+      if(products){
+        const selectProducts = products.filter(
+          (product) => product.id === el.itemId
+        );
+        selectProducts.forEach((select) => {
+          if(el.item){
+            priceTotal = priceTotal * el.itemNum
+          }
+        });
+      }
+    });
+  });
+  setTotalPrice(priceTotal);
+}
+
+// useEffect(() => {
+//   createTotalPrice();
+// })
 
   return (
     <div className='cartList'>
@@ -114,12 +139,16 @@ useEffect(() => {
                                       align="center"
                                     >
                                       <div>
-                                        {(product.price * itemInfos.itemNum).toLocaleString()}円
+                                        {(product.price * itemInfos.itemNum).toLocaleString()}円(税抜き)
                                       </div>
                                     </TableCell>
                                     <TableCell align="center">
                                       <div>
-                                        <Button>削除</Button>
+                                        <RegisterButton 
+                                          key={order.id}
+                                          label={'削除'}
+                                          onClick={() => {dispatch(DeleteOrder(uid, itemInfos, order.orderId))}}
+                                         />
                                       </div>
                                     </TableCell>
                                   </TableRow>
@@ -134,7 +163,24 @@ useEffect(() => {
             </TableContainer>
           </div>
           <div>
-            <RegisterButton label={'注文確認画面へ進む'} onClick={() => {handleLink('/orderconfirm')}} />
+        <h3 align='center'>
+          消費税：{Math.round(totalPrice * 0.1).toLocaleString()}円
+        </h3>
+        <h3 align='center'>
+          合計金額：{Math.round(totalPrice * 1.1).toLocaleString()}円
+        </h3>
+      </div>
+          <div>
+            {location.pathname === '/cartlist' ? (
+              <RegisterButton label={'注文確認画面へ進む'} 
+                onClick={() => {handleLink('/orderconfirm',{
+                sumPrice: Math.round(totalPrice * 1.1)
+                })}
+              }
+              />
+            ):(
+              <></>
+            )}
           </div>
         </div>
       )}

@@ -13,11 +13,6 @@ export const ProductsReducer = (state = initialState.products, action) => {
                 ...state,
                 sumPrice: action.payload
             };
-        case Actions.ADD_ORDERS_INFO:
-            return {
-                ...state,
-                ordersInfo: action.payload
-            };
         default:
           return state;
     }

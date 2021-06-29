@@ -3,6 +3,7 @@ import { fetchCartAction, fetchOrdersAction, signInAction,signOutAction,signUpAc
 // import { useHistory } from 'react-router';
 import {auth,db,FirebaseTimestamp} from '../../firebase/index'
 import { push } from 'connected-react-router';
+import firebase from 'firebase';
 
 
 export const signUp = (username,email,password) => {
@@ -124,6 +125,7 @@ export const fetchCart = (uid) => {
 };
 
 export const fetchOrders = (uid) => {
+  
   const ordersRef = db.collection('users').doc(uid).collection('orders');
 
   return async (dispatch) => {
@@ -137,3 +139,83 @@ export const fetchOrders = (uid) => {
     })
   }
 }
+
+export const addOrdersInfo = (selectedId, uid, num, labelName, carts) => {
+  return async (dispatch) => {
+    const ordersRef = db.collection('users').doc(uid).collection('orders');
+    console.log(uid)
+
+    if(carts.length === 0){
+      const ref = ordersRef.doc();
+      const id = ref.id
+      
+      ordersRef.doc(id).set({
+        orderId: id,
+        itemInfo: [
+          {
+            id: id,
+            itemId: selectedId,
+            itemNum: Number(num),
+            itemKind: Number(labelName)
+          },
+        ],
+        status: 0,
+    });
+    console.log(num)
+  } else {
+    let statusZero = [];
+    const ref = ordersRef.doc();
+    const id = ref.id;
+
+    ordersRef
+      .where('status', '==', 0) //配列の検索
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          statusZero.push(doc.data().orderId);
+        });
+
+        const statusZeroRef = ordersRef.doc(statusZero[0]);
+        statusZeroRef.update({
+            itemInfo: firebase.firestore.FieldValue.arrayUnion({ //要素の追加
+              id: id,
+              itemId: selectedId,
+              itemNum: Number(num),
+              itemKind: Number(labelName)
+            }),
+          });
+        });
+    }
+  };
+};
+
+export const DeleteOrder = (uid, itemInfos, orderId) => {
+  const itemInfosId = itemInfos.id;
+  const ordersRef = db.collection('users').doc(uid).collection('orders');
+  
+  return async (dispatch) => {
+    ordersRef
+    .where('status', '==', 0).get()
+      .then((querySnapshot) => {
+       querySnapshot.forEach((doc) => {
+         const docId = doc.data().orderId;
+
+         let deleteItem = doc.data()
+           .itemInfo.filter((item) => item.id !== itemInfosId);
+          
+         let localCart = [
+           {
+             orderId: orderId,
+             itemInfo: deleteItem,
+             status: 0
+           },
+         ];
+         
+         ordersRef.doc(orderId).set(localCart[0]);
+         if(doc.data().itemInfo.length === 1){
+           ordersRef.doc(docId).delete();
+         }
+      });
+    });
+  };
+};

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {Link} from 'react-router-dom'
 import { fetchProducts } from '../Reducks/products/Oparations';
 import { getProducts } from '../Reducks/products/selectors';
-// import { getUserId } from '../Reducks/users/Selectors';
+import { getUserId,getOrders } from '../Reducks/users/Selectors';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -11,6 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Search from '../components/Search';
+import { fetchCart } from '../Reducks/users/Operations';
 
 const useStyles = makeStyles(((theme) => ({
   root: {
@@ -34,16 +35,15 @@ const ProductList = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector); //商品情報
-  // const uid = getUserId(selector);
+  const uid = getUserId(selector);
+  const orders = getOrders(selector);
   const classes = useStyles();
 
   let showProducts = [];
-  console.log(products);
 
    useEffect(() => {
      dispatch(fetchProducts())
    },[dispatch]);
-
 
    const filterAlert = () => {
      alert('該当の商品はありません');
@@ -56,6 +56,10 @@ const ProductList = () => {
      );
    }
 
+   useEffect(() => {
+    dispatch(fetchCart(uid));
+  }, [dispatch, orders, uid]);
+  
     return (
       <>
       <Search setText={setInputText} />
@@ -76,6 +80,8 @@ const ProductList = () => {
                     alt='Contemplative Reptile'
                     image={product.imagePath}
                     title="Contemplative Reptile"
+                    width='500'
+                    height='300'
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">

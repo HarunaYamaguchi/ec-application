@@ -14,7 +14,3 @@ export const getSumPrice = createSelector(
   }
 );
 
-export const getOrdersInfo = createSelector(
-  [productsSelector],
-  (state) => state.ordersInfo
-);

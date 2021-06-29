@@ -2,7 +2,7 @@ import {db} from '../../firebase/index'
 // import {FirebaseTimestamp} from '../../firebase/index'
 // import { push } from "connected-react-router"
 import { fetchProductsAction, fetchSumPriceAction } from './Actions';
-import firebase from 'firebase';
+
 
 const productsRef = db.collection('products')
 
@@ -54,52 +54,3 @@ export const fetchProducts = () => {
 //     }
 // }
 
-export const addOrdersInfo = (selectedId, uid, num, labelName, carts) => {
-  return async (dispatch) => {
-
-    const ordersRef = db.collection('users').doc(uid).collection('orders');
-    console.log(uid)
-
-    if(carts === undefined){
-      const ref = ordersRef.doc();
-      const id = ref.id
-      
-      ordersRef.doc(id).set({
-        orderId: id,
-        itemInfo: [
-          {
-            id: id,
-            itemId: selectedId,
-            itemNum: Number(num),
-            itemKind: Number(labelName)
-          },
-        ],
-        status: 0,
-    });
-    console.log(num)
-  } else {
-    let statusZero = [];
-    const ref = ordersRef.doc();
-    const id = ref.id;
-
-    ordersRef
-      .where('status', '==', 0) //配列の検索
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          statusZero.push(doc.data().orderId);
-        });
-
-        const statusZeroRef = ordersRef.doc(statusZero[0]);
-        statusZeroRef.update({
-            itemInfo: firebase.firestore.FieldValue.arrayUnion({ //要素の追加
-              id: id,
-              itemId: selectedId,
-              itemNum: Number(num),
-              itemKind: Number(labelName)
-            }),
-          });
-        });
-    }
-  };
-};

@@ -43,7 +43,7 @@ const CartListItem = () => {
   const orders = getOrders(selector);
   const products = getProducts(selector);
   const uid = getUserId(selector);
-  // const [totalPrice, setTotalPrice] = useState('')
+  const [totalPrice, setTotalPrice] = useState('')
 
  useEffect(() => {
    dispatch(fetchCart(uid))
@@ -77,7 +77,7 @@ useEffect(() => {
                   <TableRow>
                     <TableCell align="center">商品名</TableCell>
                     <TableCell align="center">数量・種類</TableCell>
-                    <TableCell align="center">小計</TableCell>
+                    <TableCell align="center">小計(税抜き)</TableCell>
                   </TableRow>
                 </TableHead>
                 {orders === undefined ? ''
