@@ -222,33 +222,33 @@ export const DeleteOrder = (uid, itemInfos, orderId) => {
   };
 };
 
-export const addPaymentInfo = 
-  (uid,name,mail,zipCode,address,phoneNum,creditCardNum,payValue,sumPrice) => {
+// export const addPaymentInfo = 
+//   (uid,name,mail,zipCode,address,phoneNum,creditCardNum,payValue,sumPrice) => {
 
-    return async (dispatch) => {
-      const ordersRef = db.collection('users').doc(uid).collection('orders');
-      const timestamp = FirebaseTimestamp.now();
+//     return async (dispatch) => {
+//       const ordersRef = db.collection('users').doc(uid).collection('orders');
+//       const timestamp = FirebaseTimestamp.now();
 
-      ordersRef.where('status', '==', 0).get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const orderedId = doc.data().orderId;
-            ordersRef.doc(orderedId).update({
-              status: Number(payValue),
-              userId: uid,
-              orderDay: timestamp,
-              name: name,
-              mail: mail,
-              zipCode: zipCode,
-              address: address,
-              phoneNum: phoneNum,
-              payValueId: Number(payValue),
-              creditCard: creditCardNum,
-              totalPrice: sumPrice
-            });
-          });
-          dispatch(push('/'));
-          window.location.reload();
-        });
-    };
-};
+//       ordersRef.where('status', '==', 0).get()
+//         .then((querySnapshot) => {
+//           querySnapshot.forEach((doc) => {
+//             const orderedId = doc.data().orderId;
+//             ordersRef.doc(orderedId).update({
+//               status: Number(payValue),
+//               userId: uid,
+//               orderDay: timestamp,
+//               name: name,
+//               mail: mail,
+//               zipCode: zipCode,
+//               address: address,
+//               phoneNum: phoneNum,
+//               payValueId: Number(payValue),
+//               creditCard: creditCardNum,
+//               totalPrice: sumPrice
+//             });
+//           });
+//           dispatch(push('/'));
+//           window.location.reload();
+//         });
+//     };
+// };

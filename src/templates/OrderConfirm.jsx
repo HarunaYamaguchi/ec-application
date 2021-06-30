@@ -25,14 +25,8 @@ const OrderConfirm = () => {
   
   const { register, handleSubmit,control, formState:{ errors } } = useForm(defaultValues)
 
-  // const onSubmit = (data) => {
-  //   console.log(data)
-  // }
-
-  const onSubmit = (async(data) => {
+ const onSubmit = (async(data) => {
       console.log(data)
-      // return dispatch((data) => {
-      // console.log(data)
 
       const ordersRef = db.collection('users').doc(uid).collection('orders');
       const timestamp = FirebaseTimestamp.now();
@@ -40,7 +34,6 @@ const OrderConfirm = () => {
       ordersRef.where('status', '==', 0).get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            // console.log(data)
             const orderedId = doc.data().orderId;
 
             ordersRef.doc(orderedId).update({
@@ -61,9 +54,7 @@ const OrderConfirm = () => {
           window.location.reload();
         });
     // }
-    // )
   })
-
 
   return (
     <div>
@@ -176,10 +167,8 @@ const OrderConfirm = () => {
             </Box>
         </div>
         <div>
-        <RegisterButton label={'注文'}
-          onClick={handleSubmit(onSubmit)}
-            // dispatch(push('/confirmfinished'))}
-            
+        <RegisterButton label={'注文を確定する'}
+          onClick={handleSubmit(onSubmit)}            
            />
         </div>
       </form>

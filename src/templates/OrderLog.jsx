@@ -1,7 +1,7 @@
 import React from 'react';
-import {useDispatch,useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {getProducts} from '../Reducks/products/selectors';
-import {getUserId,getOrders} from '../Reducks/users/Selectors';
+import {getOrders} from '../Reducks/users/Selectors';
 import RegisterButton from '../UIKit/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,14 +9,14 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const OrderLog = () => {
-  // const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
-  // const uid = getUserId(selector);
   const orders = getOrders(selector);
+  const history = useHistory();
+  const handleLink = (path) => history.push(path)
 
   return (
     <div>
@@ -83,7 +83,7 @@ const OrderLog = () => {
       ):(
         <div align='center'>
           <h2>注文履歴はありません。</h2>
-          <RegisterButton label={'メニューに戻る'} />
+            <RegisterButton label={'メニューに戻る'} onClick={() => {handleLink('/')}} />
         </div>
       )}
     </div>
