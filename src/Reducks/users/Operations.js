@@ -3,7 +3,6 @@ import {auth,db} from '../../firebase/index'
 import { push } from 'connected-react-router';
 import firebase from 'firebase';
 
-
 // export const signUp = (username,email,password) => {
 //   return async (dispatch) => {
 
@@ -132,10 +131,11 @@ export const fetchOrders = (uid) => {
   const ordersRef = db.collection('users').doc(uid).collection('orders');
 
   return async (dispatch) => {
-    ordersRef.get().then((snapshots) => {
+    ordersRef.get().then(snapshots => {
       const orderList = [];
-      snapshots.forEach((snapshot) => {
-        const order = snapshot.data();
+      
+      snapshots.forEach(snapshots => {
+        const order = snapshots.data();
         orderList.push(order)
       });
       dispatch(fetchOrdersAction(orderList));
