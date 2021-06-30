@@ -66,11 +66,11 @@ const Login = () => {
             margin="normal"
             autoComplete="email"
             autoFocus
+            fullWidth
             value={email}
             onChange={inputEmail}
             id='mail'
             label='メールアドレス'
-            style={{width:300}}
             name='mail'
             {...register('mail',{
               required:'メールアドレスを入力してください',

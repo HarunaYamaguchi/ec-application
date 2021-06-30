@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { getOrders } from '../Reducks/users/Selectors';
 import { useHistory,useLocation } from 'react-router';
@@ -64,26 +64,26 @@ const createTotalPrice = () =>  {
           (product) => product.id === el.itemId
         );
         selectProducts.forEach((select) => {
-          if(el.item){
-            priceTotal = priceTotal * el.itemNum
+          if(el.itemId){
+            priceTotal = priceTotal + select.price * el.itemNum
           }
         });
       }
     });
   });
   setTotalPrice(priceTotal);
-}
+};
 
-// useEffect(() => {
-//   createTotalPrice();
-// })
+useEffect(() => {
+  createTotalPrice();
+})
 
   return (
     <div className='cartList'>
       <h2 align='center'>ショッピングカート</h2>
-        {orders === undefined ? (
+        {orders === null ? (
           ''
-         ) : orders.filter((el) => el.status === 0) === 0
+         ) : orders.filter((el) => el.status === 0) === undefined
          ? 
          (
           <div align="center">
@@ -163,20 +163,19 @@ const createTotalPrice = () =>  {
             </TableContainer>
           </div>
           <div>
-        <h3 align='center'>
-          消費税：{Math.round(totalPrice * 0.1).toLocaleString()}円
-        </h3>
-        <h3 align='center'>
-          合計金額：{Math.round(totalPrice * 1.1).toLocaleString()}円
-        </h3>
-      </div>
+            <h3 align='center'>
+              消費税：{Math.round(totalPrice * 0.1).toLocaleString()}円
+            </h3>
+            <h3 align='center'>
+              合計金額：{Math.round(totalPrice * 1.1).toLocaleString()}円
+            </h3>
+          </div>
           <div>
             {location.pathname === '/cartlist' ? (
               <RegisterButton label={'注文確認画面へ進む'} 
-                onClick={() => {handleLink('/orderconfirm',{
+                onClick={() => history.push('/orderconfirm',{
                 sumPrice: Math.round(totalPrice * 1.1)
-                })}
-              }
+              })}
               />
             ):(
               <></>
@@ -188,4 +187,4 @@ const createTotalPrice = () =>  {
   );
 };
 
-export default CartList;
+export default memo(CartList);

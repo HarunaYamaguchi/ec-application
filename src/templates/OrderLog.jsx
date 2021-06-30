@@ -12,10 +12,10 @@ import TableRow from '@material-ui/core/TableRow';
 import { Link } from 'react-router-dom';
 
 const OrderLog = () => {
-  const dispatch = useDispatch();
-  const selector = useSelector();
+  // const dispatch = useDispatch();
+  const selector = useSelector((state) => state);
   const products = getProducts(selector);
-  const uid = getUserId(selector);
+  // const uid = getUserId(selector);
   const orders = getOrders(selector);
 
   return (
@@ -28,7 +28,6 @@ const OrderLog = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">配達予定日</TableCell>
                   <TableCell align="center">商品名</TableCell>
                   <TableCell align="center">数量</TableCell>
                 </TableRow>
@@ -40,16 +39,11 @@ const OrderLog = () => {
                 .map((order) => {
                   return (
                     <TableBody key={order.orderId}>
-                      <TableRow>
-                        <TableCell align="center">
-                          <h3>注文した日</h3>
-                        </TableCell>
-                      </TableRow>
                       {order.itemInfo.map((itemInfos) => {
                         return products === undefined
                         ? ''
                         : products.filter((product) =>
-                            product.id === itemInfos.id
+                            product.id === itemInfos.itemId
                           ).map((product) => {
                             return (
                               <TableRow key={product.id}>

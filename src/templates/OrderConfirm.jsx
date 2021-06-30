@@ -1,22 +1,69 @@
 import React from 'react';
-// import { makeStyles } from '@material-ui/core';
 import { RegisterButton } from '../UIKit';
-import { useHistory } from 'react-router';
 import { Controller, useForm } from 'react-hook-form';
 import CartListItem from '../components/CartListItem';
-import { TextField,Box,Button } from '@material-ui/core';
+import { TextField,Box,Select, MenuItem } from '@material-ui/core';
+import { getUserId } from '../Reducks/users/Selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+// import { addPaymentInfo } from '../Reducks/users/Operations';
+import {db,FirebaseTimestamp} from '../firebase/index'
+import { push } from 'connected-react-router';
 
 const OrderConfirm = () => {
-  // const classes = useStyles()
-  const history = useHistory();
-  const handleLink = (path) => history.push(path)
-  const { register, handleSubmit, control, formState:{ errors } } = useForm()
-  const onSubmit = (data) => console.log(data)
+  // const history = useHistory();
+  const dispatch = useDispatch()
+  
+  const selector = useSelector((state) => state);
+  const uid = getUserId(selector);
+  const sumPrice = useLocation().state.sumPrice;
 
-  const paymentList = [
-    { id: 0, value: 1, name:"代金引換"},
-    { id: 1, value: 2, name:"クレジットカード"}
-  ]
+  const defaultValues = {
+    TextField: '',
+    Select: '',
+  };
+  
+  const { register, handleSubmit,control, formState:{ errors } } = useForm(defaultValues)
+
+  // const onSubmit = (data) => {
+  //   console.log(data)
+  // }
+
+  const onSubmit = (async(data) => {
+      console.log(data)
+      // return dispatch((data) => {
+      // console.log(data)
+
+      const ordersRef = db.collection('users').doc(uid).collection('orders');
+      const timestamp = FirebaseTimestamp.now();
+
+      ordersRef.where('status', '==', 0).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            // console.log(data)
+            const orderedId = doc.data().orderId;
+
+            ordersRef.doc(orderedId).update({
+              status: data.payValue,
+              userId: uid,
+              orderDay: timestamp,
+              name: data.name,
+              mail: data.mail,
+              zipCode: data.zipCode,
+              address: data.address,
+              phoneNumber: data.phoneNumber,
+              payValueId: data.payValue,
+              // creditCard: data.creditCardNum,
+              totalPrice: sumPrice
+            });
+          });
+          dispatch(push('/orderfinished'));
+          window.location.reload();
+        });
+    // }
+    // )
+  })
+
 
   return (
     <div>
@@ -37,8 +84,8 @@ const OrderConfirm = () => {
                   {...register('name',{
                     required: "名前を入力してください",
                     maxLength: {
-                      value: 10,
-                      message: '10文字以内で名前を記述してください'
+                      value: 15,
+                      message: '15文字以内で名前を記述してください'
                     }
                   })}
                   helperText={errors.name && errors.name.message}
@@ -103,17 +150,37 @@ const OrderConfirm = () => {
                   })}
                   helperText={errors.phoneNumber && errors.phoneNumber.message}
                 />
-             </Box>
-             <Box mt={2}>
-                <TextField 
-                  
-                />
-             </Box>
+              </Box>
+              <Box mt={2}>
+                  <Controller
+                        render={
+                          ({ field }) => <Select {...field}>
+                            <MenuItem id={0} value={1} >代金引き換え</MenuItem>
+                            <MenuItem id={1} value={2} >クレジットカード</MenuItem>
+                          </Select>
+                        }
+                        rules={{ required: true }}
+                        control={control}
+                        name="payValue"
+                        defaultValue={1}
+                  />
+                  {/* {payValue === 2 ? (
+                            <TextField 
+                              id="creditCard"
+                              label="クレジットカード番号"
+                              name="creditCardNum"
+                              style={{width:300}}
+                              />
+                          ) : ('')} */}
+              </Box>
             </Box>
         </div>
         <div>
-          <RegisterButton label={'注文確定'} onClick={handleLink('orderconfirm')} />
-          {/* <RegisterButton label={'注文確定'} onClick={handleSubmit(onSubmit)}></RegisterButton> */}
+        <RegisterButton label={'注文'}
+          onClick={handleSubmit(onSubmit)}
+            // dispatch(push('/confirmfinished'))}
+            
+           />
         </div>
       </form>
     </div>

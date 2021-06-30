@@ -1,7 +1,6 @@
 import { fetchCartAction, fetchOrdersAction, signInAction,signOutAction,signUpAction } from "./Actions";
-// import { useDispatch } from 'react-redux';
-// import { useHistory } from 'react-router';
 import {auth,db,FirebaseTimestamp} from '../../firebase/index'
+import { createBrowserHistory } from 'history';
 import { push } from 'connected-react-router';
 import firebase from 'firebase';
 
@@ -34,11 +33,13 @@ export const signUp = (username,email,password) => {
           }
             dispatch(signUpAction(username, email, password));
          });
-    }
-}
+    };
+};
 
 
 export const signIn = (email,password) => {
+  const browserHistory = createBrowserHistory();
+
     return async (dispatch) => {
       auth.signInWithEmailAndPassword(email,password)
         .then((result) => {
@@ -56,12 +57,13 @@ export const signIn = (email,password) => {
                   isSignedIn: true,
                   uid: userId,
                   username: data.username,
-                }))
-                dispatch(push('/'))
-              })
-            })
+                }));
+                browserHistory(push('/'));
+                window.location.reload();
+              });
+            });
           }
-        })
+        });
   };
 }
 
@@ -77,6 +79,7 @@ export const signOut = () => {
         throw new Error('ログアウトに失敗しました。');
       });
     dispatch(push('/login'));
+    window.location.reload();
   };
 };
 
@@ -89,21 +92,22 @@ export const listenAuthState = () => {
           db.collection('users').doc(uid).collection('userInfo').get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              const data = doc.data()
+              const data = doc.data();
 
               dispatch(signInAction({
                 isSignedIn:true,
                 uid: uid,
-                username:data.username,
-              }))
-            })
-          })
+                username: data.username,
+                mail: data.mail
+              }));
+            });
+          });
       } else {
-        dispatch(push('/login'))
+        dispatch(push('/login'));
       }
-    })
-  }
-}
+    });
+  };
+};
 
 export const fetchCart = (uid) => {
   return async (dispatch) => {
@@ -137,13 +141,12 @@ export const fetchOrders = (uid) => {
       });
       dispatch(fetchOrdersAction(orderList));
     })
-  }
-}
+  };
+};
 
 export const addOrdersInfo = (selectedId, uid, num, labelName, carts) => {
   return async (dispatch) => {
     const ordersRef = db.collection('users').doc(uid).collection('orders');
-    console.log(uid)
 
     if(carts.length === 0){
       const ref = ordersRef.doc();
@@ -161,7 +164,6 @@ export const addOrdersInfo = (selectedId, uid, num, labelName, carts) => {
         ],
         status: 0,
     });
-    console.log(num)
   } else {
     let statusZero = [];
     const ref = ordersRef.doc();
@@ -218,4 +220,35 @@ export const DeleteOrder = (uid, itemInfos, orderId) => {
       });
     });
   };
+};
+
+export const addPaymentInfo = 
+  (uid,name,mail,zipCode,address,phoneNum,creditCardNum,payValue,sumPrice) => {
+
+    return async (dispatch) => {
+      const ordersRef = db.collection('users').doc(uid).collection('orders');
+      const timestamp = FirebaseTimestamp.now();
+
+      ordersRef.where('status', '==', 0).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const orderedId = doc.data().orderId;
+            ordersRef.doc(orderedId).update({
+              status: Number(payValue),
+              userId: uid,
+              orderDay: timestamp,
+              name: name,
+              mail: mail,
+              zipCode: zipCode,
+              address: address,
+              phoneNum: phoneNum,
+              payValueId: Number(payValue),
+              creditCard: creditCardNum,
+              totalPrice: sumPrice
+            });
+          });
+          dispatch(push('/'));
+          window.location.reload();
+        });
+    };
 };

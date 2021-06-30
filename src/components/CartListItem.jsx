@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { getOrders } from '../Reducks/users/Selectors';
 import { useHistory } from 'react-router';
@@ -56,6 +56,31 @@ useEffect(() => {
 useEffect(() => {
   dispatch(fetchOrders(uid))
 },[dispatch,orders,uid])
+
+const createTotalPrice = () =>  {
+  let priceTotal = 0;
+  const filterOrder = orders.filter((order) => order.status === 0);
+
+  filterOrder.forEach((item) => {
+    item.itemInfo.forEach((el) => {
+      if(products){
+        const selectProducts = products.filter(
+          (product) => product.id === el.itemId
+        );
+        selectProducts.forEach((select) => {
+          if(el.itemId){
+            priceTotal = priceTotal + select.price * el.itemNum
+          }
+        });
+      }
+    });
+  });
+  setTotalPrice(priceTotal);
+};
+
+useEffect(() => {
+  createTotalPrice();
+})
 
   return (
     <div className='cartList'>
@@ -131,11 +156,18 @@ useEffect(() => {
               </Table>
             </TableContainer>
           </div>
+          <div>
+            <h3 align='center'>
+              消費税：{Math.round(totalPrice * 0.1).toLocaleString()}円
+            </h3>
+            <h3 align='center'>
+              合計金額：{Math.round(totalPrice * 1.1).toLocaleString()}円
+            </h3>
+          </div>
         </div>
       )}
     </div>
   );
 };
-
-export default CartListItem;
+export default memo(CartListItem);
 

@@ -70,7 +70,7 @@ const Header = () => {
                 ''
               ):(
                 <IconButton aria-label="shopping-cart" color="inherit"
-                onClick={() => {handleLink('/cartList')}}
+                onClick={() => {handleLink('/cartlist')}}
                 >
                 <ShoppingCartRoundedIcon />
                 </IconButton>
