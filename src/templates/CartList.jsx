@@ -83,7 +83,7 @@ useEffect(() => {
       <h2 align='center'>ショッピングカート</h2>
         {orders === null ? (
           ''
-         ) : orders.filter((el) => el.status === 0) === undefined
+         ) : orders.filter((el) => el.status === 0).length === 0
          ? 
          (
           <div align="center">

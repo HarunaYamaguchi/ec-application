@@ -1,5 +1,5 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
+import React,{ useEffect } from 'react';
+import {useDispatch,useSelector} from 'react-redux';
 import {getProducts} from '../Reducks/products/selectors';
 import {getOrders} from '../Reducks/users/Selectors';
 import RegisterButton from '../UIKit/Button';
@@ -10,13 +10,24 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Link, useHistory } from 'react-router-dom';
+import { getUserId } from '../Reducks/users/Selectors';
+import { fetchOrders } from '../Reducks/users/Operations';
 
 const OrderLog = () => {
+  const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
   const orders = getOrders(selector);
   const history = useHistory();
   const handleLink = (path) => history.push(path)
+  const uid = getUserId(selector);
+
+  useEffect(() => {
+    if (uid) {
+      dispatch(fetchOrders(uid));
+    }
+  }, [dispatch, uid, orders]);
+
 
   return (
     <div>
@@ -39,11 +50,11 @@ const OrderLog = () => {
                 .map((order) => {
                   return (
                     <TableBody key={order.orderId}>
-                      {order.itemInfo.map((itemInfos) => {
+                      {order.itemInfos.map((itemInfo) => {
                         return products === undefined
                         ? ''
                         : products.filter((product) =>
-                            product.id === itemInfos.itemId
+                            product.id === itemInfo.itemId
                           ).map((product) => {
                             return (
                               <TableRow key={product.id}>
@@ -62,8 +73,8 @@ const OrderLog = () => {
                                   {product.name}
                                 </Link>
                                 <TableCell align="center"
-                                  key={itemInfos.itemId}>
-                                 {itemInfos.itemNum}個
+                                  key={itemInfo.itemId}>
+                                 {itemInfo.itemNum}個
                                 </TableCell>
                               </TableRow>
                             );

@@ -1,71 +1,70 @@
-import { fetchCartAction, fetchOrdersAction, signInAction,signOutAction,signUpAction } from "./Actions";
-import {auth,db,FirebaseTimestamp} from '../../firebase/index'
-import { createBrowserHistory } from 'history';
+import { fetchCartAction, fetchOrdersAction, signInAction,signOutAction } from "./Actions";
+import {auth,db} from '../../firebase/index'
 import { push } from 'connected-react-router';
 import firebase from 'firebase';
 
 
-export const signUp = (username,email,password) => {
-  return async (dispatch) => {
+// export const signUp = (username,email,password) => {
+//   return async (dispatch) => {
 
-       return auth.createUserWithEmailAndPassword(email,password)
-       .then((result) => {
-        const userState = result.user;
-        const uid = userState.uid
+//        return auth.createUserWithEmailAndPassword(email,password)
+//        .then((result) => {
+//         const userState = result.user;
+//         const uid = userState.uid
 
-         if(userState) {
-           const timestamp = FirebaseTimestamp.now();
+//          if(userState) {
+//            const timestamp = FirebaseTimestamp.now();
            
-           const userInitialData = {
-             created_at: timestamp,
-             email: email,
-             uid: uid,
-             updated_at: timestamp,
-             username: username,
-             password: password
-            }
+//            const userInitialData = {
+//              created_at: timestamp,
+//              email: email,
+//              uid: uid,
+//              updated_at: timestamp,
+//              username: username,
+//              password: password
+//             }
 
-            db.collection(`users/${uid}/userInfo`).doc().set(userInitialData)
-            .then(async () => {
-              dispatch(push('/'));
-              window.location.reload();
-            });
-          }
-            dispatch(signUpAction(username, email, password));
-         });
-    };
-};
+//             db.collection(`users/${uid}/userInfo`).doc().set(userInitialData)
+//             .then(async () => {
+//               dispatch(push('/'));
+//               window.location.reload();
+//             });
+//           }
+//             dispatch(signUpAction(username, email, password));
+//          });
+//     };
+// };
 
 
-export const signIn = (email,password) => {
-  const browserHistory = createBrowserHistory();
+// export const signIn = (email,password) => {
+//   const browserHistory = createBrowserHistory();
 
-    return async (dispatch) => {
-      auth.signInWithEmailAndPassword(email,password)
-        .then((result) => {
-          const userState = result.user;
-          const userId = userState.uid;
-          console.log(userId);
+//     return async (dispatch) => {
+//       auth.signInWithEmailAndPassword(email,password)
+//         .then((result) => {
+//           const userState = result.user;
+//           const userId = userState.uid;
+//           console.log(userId);
 
-          if(userState) {
-            db.collection('users').doc(userId).collection('userInfo').get()
-            .then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                const data = doc.data()
+//           if(userState) {
+//             db.collection('users').doc(userId).collection('userInfo').get()
+//             .then((querySnapshot) => {
+//               querySnapshot.forEach((doc) => {
+//                 const data = doc.data()
 
-                dispatch(signInAction({
-                  isSignedIn: true,
-                  uid: userId,
-                  username: data.username,
-                }));
-                browserHistory(push('/'));
-                window.location.reload();
-              });
-            });
-          }
-        });
-  };
-}
+//                 dispatch(signInAction({
+//                   isSignedIn: true,
+//                   uid: userId,
+//                   username: data.username,
+//                 }));
+//                 browserHistory(push('/'));
+//                 window.location.reload();
+//               });
+//             });
+//           }
+//         });
+//   };
+// }
 
 
 export const signOut = () => {
@@ -221,34 +220,3 @@ export const DeleteOrder = (uid, itemInfos, orderId) => {
     });
   };
 };
-
-// export const addPaymentInfo = 
-//   (uid,name,mail,zipCode,address,phoneNum,creditCardNum,payValue,sumPrice) => {
-
-//     return async (dispatch) => {
-//       const ordersRef = db.collection('users').doc(uid).collection('orders');
-//       const timestamp = FirebaseTimestamp.now();
-
-//       ordersRef.where('status', '==', 0).get()
-//         .then((querySnapshot) => {
-//           querySnapshot.forEach((doc) => {
-//             const orderedId = doc.data().orderId;
-//             ordersRef.doc(orderedId).update({
-//               status: Number(payValue),
-//               userId: uid,
-//               orderDay: timestamp,
-//               name: name,
-//               mail: mail,
-//               zipCode: zipCode,
-//               address: address,
-//               phoneNum: phoneNum,
-//               payValueId: Number(payValue),
-//               creditCard: creditCardNum,
-//               totalPrice: sumPrice
-//             });
-//           });
-//           dispatch(push('/'));
-//           window.location.reload();
-//         });
-//     };
-// };

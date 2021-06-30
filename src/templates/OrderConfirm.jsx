@@ -6,12 +6,10 @@ import { TextField,Box,Select, MenuItem } from '@material-ui/core';
 import { getUserId } from '../Reducks/users/Selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-// import { addPaymentInfo } from '../Reducks/users/Operations';
 import {db,FirebaseTimestamp} from '../firebase/index'
 import { push } from 'connected-react-router';
 
 const OrderConfirm = () => {
-  // const history = useHistory();
   const dispatch = useDispatch()
   
   const selector = useSelector((state) => state);
@@ -25,36 +23,35 @@ const OrderConfirm = () => {
   
   const { register, handleSubmit,control, formState:{ errors } } = useForm(defaultValues)
 
- const onSubmit = (async(data) => {
-      console.log(data)
+  const onSubmit = (async(data) => {
+        console.log(data)
 
-      const ordersRef = db.collection('users').doc(uid).collection('orders');
-      const timestamp = FirebaseTimestamp.now();
+        const ordersRef = db.collection('users').doc(uid).collection('orders');
+        const timestamp = FirebaseTimestamp.now();
 
-      ordersRef.where('status', '==', 0).get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const orderedId = doc.data().orderId;
+        ordersRef.where('status', '==', 0).get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              const orderedId = doc.data().orderId;
 
-            ordersRef.doc(orderedId).update({
-              status: data.payValue,
-              userId: uid,
-              orderDay: timestamp,
-              name: data.name,
-              mail: data.mail,
-              zipCode: data.zipCode,
-              address: data.address,
-              phoneNumber: data.phoneNumber,
-              payValueId: data.payValue,
-              // creditCard: data.creditCardNum,
-              totalPrice: sumPrice
+              ordersRef.doc(orderedId).update({
+                status: data.payValue,
+                userId: uid,
+                orderDay: timestamp,
+                name: data.name,
+                mail: data.mail,
+                zipCode: data.zipCode,
+                address: data.address,
+                phoneNumber: data.phoneNumber,
+                payValueId: data.payValue,
+                // creditCard: data.creditCardNum,
+                totalPrice: sumPrice.toLocaleString()
+              });
             });
+            dispatch(push('/orderfinished'));
+            window.location.reload();
           });
-          dispatch(push('/orderfinished'));
-          window.location.reload();
-        });
-    // }
-  })
+    })
 
   return (
     <div>

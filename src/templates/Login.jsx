@@ -1,16 +1,17 @@
-import React,{ useState } from 'react';
-import { useCallback } from 'react';
+import React from 'react';
 import { useDispatch} from 'react-redux';
 import { useHistory } from 'react-router';
 import { useForm } from "react-hook-form";
-import { signIn } from '../Reducks/users/Operations';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import RegisterButton  from '../UIKit/Button';
 import { Link } from 'react-router-dom';
+import {auth,db} from '../firebase/index'
+import { push } from 'connected-react-router';
+import { signInAction } from "../Reducks/users/Actions";
+import { TextField} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  button: {
+    alignItems: 'center',
+    padding: '30px auto'
+  }
 }));
 
 const Login = () => {
@@ -38,19 +43,34 @@ const Login = () => {
   const handlePage = (path) => history.push(path);
   const classes = useStyles();
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const { register, handleSubmit, formState:{ errors } } = useForm();
 
-    const inputEmail = useCallback((e) => {
-        setEmail(e.target.value)
-    },[setEmail]);
+  const onSubmit = (async(data) => {
 
-    const inputPassword = useCallback((e) => {
-        setPassword(e.target.value)
-    },[setPassword]);
+      auth.signInWithEmailAndPassword(data.email, data.password)
+        .then((result) => {
+          const userState = result.user;
+          const userId = userState.uid;
 
-  const { register,handleSubmit,formState:{ errors } } = useForm();
-  const onSubmit = data => console.log(data);
+          if(userState) {
+            db.collection('users').doc(userId).collection('userInfo').get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                const dataDb = doc.data()
+
+                dispatch(signInAction({
+                  isSignedIn: true,
+                  uid: userId,
+                  username: dataDb.username,
+                }));
+
+                dispatch(push('/'));
+                window.location.reload();
+              });
+            });
+          }
+        });
+  });
   
   return (
     <Container component="main" maxWidth="xs">
@@ -59,21 +79,18 @@ const Login = () => {
       <Typography component="h1" variant="h5">
         ログイン
       </Typography>
-      <div className={classes.form} noValidate>
+      <div className={classes.form}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            variant="outlined"
+           variant="outlined"
             margin="normal"
-            autoComplete="email"
-            autoFocus
             fullWidth
-            value={email}
-            onChange={inputEmail}
-            id='mail'
             label='メールアドレス'
-            name='mail'
-            {...register('mail',{
-              required:'メールアドレスを入力してください',
+            type='text'
+            name='email'
+            id='email'
+            {...register('email',{
+              required:'メールアドレスが入力されていません',
               pattern: {
                 value:/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
                 message:'メールアドレスを正しく入力してください'
@@ -84,29 +101,24 @@ const Login = () => {
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
             name="password"
-            label="Password"
+            label="パスワード"
             type="password"
             id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={inputPassword}
+            {...register("password",{
+              id:'password',
+              required:"パスワードが入力されていません",
+              minLength: {
+                value:6,
+                message:'6文字以上で入力してください'
+              }
+            })}
+            helperText={errors.password && errors.password.message}    
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={() => {
-              //e.preventDefault();
-              dispatch(signIn(email, password));
-            }}
-          >
-            ログイン
-          </Button>
+          <RegisterButton label={'ログイン'} className={classes.button}
+            onClick={handleSubmit(onSubmit)}
+          />
         </form>
       </div>
       <Link to="/signup"
@@ -117,26 +129,6 @@ const Login = () => {
     </div>
   </Container>
 );
-
-    //     ・パスワード<input name="password"
-    //     {...register("password",{
-    //       id:'password',
-    //       required:"パスワードが入力されていません",
-    //       minLength: {
-    //         value:6,
-    //       message:'6文字以上で入力してください'
-    //       }
-    //     })}
-    //       />
-    //     {errors.password && errors.password.message}
-
-    //     <input type="submit" 
-    //       onClick={() => {
-    //         dispatch(signIn(mail,password))}
-    //     }
-    //       /> 
-    // </form>
-  // )
 }
 
 export default Login;

@@ -1,91 +1,139 @@
-import React,{useCallback,useState} from "react";
-import TextInput from "../UIKit/textInput";
+import React from "react";
+import { useHistory } from 'react-router';
 import { useForm } from "react-hook-form";
 import TextField from '@material-ui/core/TextField';
-import { signUp } from "../Reducks/users/Operations";
-import { useDispatch } from "react-redux";
-import {push} from 'connected-react-router'
 import RegisterButton from "../UIKit/Button";
-import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import {auth,db,FirebaseTimestamp} from '../firebase/index';
+import { signUpAction } from "../Reducks/users/Actions";
+import { useDispatch } from "react-redux";
+import { push } from 'connected-react-router';
 
 const SignUp  = () => {
-
-  const { register, handleSubmit, errors} = useForm();
-  const onSubmit = data => console.log(data);
   const dispatch = useDispatch();
+  const history = useHistory();
+  const handlePage = (path) => history.push(path);
 
-  const [username, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassWord] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const { register, handleSubmit, formState:{errors}} = useForm();
 
-const useStyles = makeStyles((theme) => ({
-  center: {
-    margin: '0 auto',
-    align: 'center',
-   },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+  const onSubmit = (async(data) => {
+    console.log(data);
 
-  const inputUserName = useCallback((e) => {
-    setUserName(e.target.value)
-  },[setUserName])
+    auth.createUserWithEmailAndPassword(data.email, data.password, data.username)
+       .then((result) => {
+        const userState = result.user;
+        const uid = userState.uid
 
-  const inputEmail = useCallback((e) => {
-    setEmail(e.target.value)
-  },[setEmail])
+         if(userState) {
+           const timestamp = FirebaseTimestamp.now();
+           
+           const userInitialData = {
+             created_at: timestamp,
+             email: data.email,
+             uid: uid,
+             updated_at: timestamp,
+             username: data.username,
+             password: data.password
+            }
 
-  const inputPassWord = useCallback((e) => {
-    setPassWord(e.target.value)
-  },[setPassWord])
-
-  const inputConfirmPassword = useCallback((e) => {
-    setConfirmPassword(e.target.value)
-  },[setConfirmPassword])
+            db.collection(`users/${uid}/userInfo`).doc().set(userInitialData)
+            .then(async () => {
+              dispatch(push('/'));
+              window.location.reload();
+            });
+          }
+            dispatch(signUpAction(data.username, data.email, data.password));
+         });
+    })
 
   return (
+    <div>
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 align="center">アカウント登録</h2>
+      <div>
       <TextField
-        fullWidth={true}
-        label={'ユーザー名'}
-        type={'text'}
-        name={'username'}
+        variant="outlined"
+        fullWidth
+        id='name'
+        label='ユーザー名'
+        type='text'
+        name='name'
         margin="normal"
-        multiline={false} required={true}
-        value={username}  onChange={inputUserName}
-
+        {...register('name',{
+          required: "名前を入力してください",
+          maxLength: {
+            value: 15,
+            message: '15文字以内で名前を記述してください'
+          }
+        })}
+        helperText={errors.name && errors.name.message}
        />
-       
-      <TextInput variant="outlined"
-        fullWidth={true} label={'メールアドレス'} multiline={false} required={true}
-        margin="normal" value={email} type={'email'} onChange={inputEmail}
+      <TextField 
+        id='email'
+        variant="outlined"
+        fullWidth 
+        label='メールアドレス'
+        margin="normal"
+        type={'email'} 
+        {...register('email',{
+          required:'メールアドレスを入力してください',
+          pattern: {
+            value:/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
+            message:'メールアドレスを正しく入力してください'
+          }
+        })}
+        helperText={errors.email && errors.email.message}
        />
 
-      <TextInput variant="outlined"
-        fullWidth={true} label={'パスワード'} multiline={false} required={true}
-        margin="normal" value={password} type={'password'} onChange={inputPassWord}
-       />
-
-      <TextInput variant="outlined"
-        fullWidth={true} label={'パスワード確認用'} multiline={false} required={true}
-        margin="normal" value={confirmPassword} type={'password'} onChange={inputConfirmPassword}
+      <TextField 
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        name="password"
+        label="パスワード"
+        type="password"
+        id="password"
+        {...register("password",{
+          required:"パスワードが入力されていません",
+          minLength: {
+            value:6,
+            message:'6文字以上で入力してください'
+          }
+        })}
+        helperText={errors.password && errors.password.message}    
+      />
+      <TextField
+        variant="outlined"
+        fullWidth
+        label='パスワード確認用'
+        margin="normal" 
+        type='password' 
+        name="passwordConfirm"
+        id="passwordConfirm"
+        {...register("passwordConfirm",{
+          required:"パスワードが入力されていません",
+          minLength: {
+            value:6,
+            message:'6文字以上で入力してください'
+          }
+        })}
+        helperText={errors.passwordConfirm && errors.passwordConfirm.message}    
        />
 
          <div>
             <RegisterButton align="center" label={'アカウント登録'} 
-              onClick={() => {dispatch(signUp(username,email,password,confirmPassword))}}>
+              onClick={handleSubmit(onSubmit)}>
             </RegisterButton>
          </div>
          <div>
-            <Link to='/login' onClick={() => dispatch(push('/login'))}>
+            <Link to='/login'
+              onClick={() => { handlePage('/login')}}>
               アカウントをお持ちの方はこちら
             </Link>
-         </div>
+        </div>
+      </div>
     </form>
+    </div>
   )
 }
 
