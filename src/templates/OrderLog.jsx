@@ -38,7 +38,7 @@ const OrderLog = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">sy</TableCell>
+                  <TableCell align="center">商品</TableCell>
                   <TableCell align="center">商品名</TableCell>
                   <TableCell align="center">数量</TableCell>
                 </TableRow>
@@ -56,7 +56,7 @@ const OrderLog = () => {
                             product.id === itemInfos.itemId)
                           .map((product) => {
                             return (
-                              <TableRow key={product.itemId}>
+                              <TableRow key={product.id}>
                                 <TableCell align="center">
                                   <img
                                     src={product.imagePath}
@@ -71,13 +71,13 @@ const OrderLog = () => {
                                     pathname: '/itemdetail',
                                     selectedItemId: product.id,
                                    }}
-                                    key={itemInfos.itemId}
+                                    key={product.id}
                                     >
                                     {product.name}
                                   </Link>
                                 </TableCell>
                                 <TableCell align="center"
-                                  key={itemInfos.itemId}>
+                                  key={product.id}>
                                  {itemInfos.itemNum}個
                                 </TableCell>
                                 <TableCell>
