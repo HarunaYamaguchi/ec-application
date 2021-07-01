@@ -1,5 +1,5 @@
 export const initialState = {
-  products: { },
+  products: {},
   users: {
     isSignedIn: false,
     uid: "",
