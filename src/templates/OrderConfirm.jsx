@@ -24,7 +24,7 @@ const OrderConfirm = () => {
   const { register, handleSubmit,control, formState:{ errors } } = useForm(defaultValues)
 
   const onSubmit = (async(data) => {
-        console.log(data)
+        // console.log(data)
 
         const ordersRef = db.collection('users').doc(uid).collection('orders');
         const timestamp = FirebaseTimestamp.now();
@@ -45,7 +45,7 @@ const OrderConfirm = () => {
                 phoneNumber: data.phoneNumber,
                 payValueId: data.payValue,
                 // creditCard: data.creditCardNum,
-                totalPrice: sumPrice.toLocaleString()
+                totalPrice: Number(sumPrice.toLocaleString()),
               });
             });
             dispatch(push('/orderfinished'));

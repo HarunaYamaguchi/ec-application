@@ -23,11 +23,12 @@ const OrderLog = () => {
   const uid = getUserId(selector);
 
   useEffect(() => {
-    if (uid) {
+    if(uid){
       dispatch(fetchOrders(uid));
     }
-  }, [dispatch, uid, orders]);
+  }, [dispatch, orders, uid]);
 
+ 
 
   return (
     <div>
@@ -46,20 +47,22 @@ const OrderLog = () => {
               {orders === undefined 
               ?
               ''
-              : orders.filter((order) => order.status !== 0)
+              : orders.filter((orders) => orders.status !== 0)
                 .map((order) => {
                   return (
-                    <TableBody key={order.orderId}>
-                      {order.itemInfos.map((itemInfo) => {
-                        return products === undefined
-                        ? ''
-                        : products.filter((product) =>
-                            product.id === itemInfo.itemId
-                          ).map((product) => {
+                    <TableBody key={order.itemInfo.itemId}>
+                      {order.itemInfo.map((itemInfos) => {
+                        // return itemInfo !== undefined
+                        // ? ''
+                        // : itemInfo.filter((orderItem) =>
+                        //     orderItem.id === itemInfo.itemId
+                        //   )
+                        //   .map((item) => {
                             return (
-                              <TableRow key={product.id}>
+                              <TableRow key={itemInfos.itemId}>
                                 <TableCell align="center">
-                                  <img src={product.imagePath}
+                                  <img 
+                                    src={itemInfos.imagePath}
                                     alt="商品画像"
                                     height='100px'
                                     width='100px'
@@ -68,23 +71,25 @@ const OrderLog = () => {
                                 </TableCell>
                                 <Link to={{
                                   pathname: '/itemdetail',
-                                  selectedItemId: product.id
-                                }}>
-                                  {product.name}
+                                  selectedItemId: itemInfos.itemId,
+                                }} 
+                                  key={itemInfos.id}>
+                                  {itemInfos.name}
                                 </Link>
                                 <TableCell align="center"
-                                  key={itemInfo.itemId}>
-                                 {itemInfo.itemNum}個
+                                  key={itemInfos.itemId}>
+                                 {itemInfos.itemNum}個
                                 </TableCell>
                               </TableRow>
                             );
-                          })
+                          // })
                       })}
                         <TableRow>
                           <TableCell>
-                            <h3>合計金額:{order.totalPrice.toLocaleString()}</h3>
+                            <h3>合計金額:{orders.totalPrice}円</h3>
                           </TableCell>
                         </TableRow>
+
                     </TableBody>
                   );
                 })

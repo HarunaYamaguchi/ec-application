@@ -1,5 +1,5 @@
 export const initialState = {
-  products: {},
+  products: { },
   users: {
     isSignedIn: false,
     uid: "",
@@ -11,5 +11,5 @@ export const initialState = {
     phoneNum:'',
     payValueId: '',
   },
-  sumPrice:'',
+  sumPrice: '',
 };

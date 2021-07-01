@@ -131,11 +131,11 @@ export const fetchOrders = (uid) => {
   const ordersRef = db.collection('users').doc(uid).collection('orders');
 
   return async (dispatch) => {
-    ordersRef.get().then(snapshots => {
+    ordersRef.get().then(querySnapshot => {
       const orderList = [];
       
-      snapshots.forEach(snapshots => {
-        const order = snapshots.data();
+      querySnapshot.forEach(querySnapshot => {
+        const order = querySnapshot.data();
         orderList.push(order)
       });
       dispatch(fetchOrdersAction(orderList));

@@ -39,7 +39,7 @@ const CartList = () => {
   const products = getProducts(selector);
   const uid = getUserId(selector);
   const [totalPrice, setTotalPrice] = useState(0)
-  const handleLink = (path) => history.push(path)
+  // const handleLink = (path) => history.push(path)
 
  useEffect(() => {
    dispatch(fetchCart(uid))
@@ -52,6 +52,7 @@ useEffect(() => {
 useEffect(() => {
   dispatch(fetchOrders(uid))
 },[dispatch,orders,uid])
+
 
 const createTotalPrice = () =>  {
   let priceTotal = 0;

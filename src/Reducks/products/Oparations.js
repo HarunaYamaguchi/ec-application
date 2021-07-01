@@ -15,10 +15,10 @@ export const fetchSumPrice = (sumPrice) => {
 export const fetchProducts = () => {
   return async (dispatch) => {
     productsRef.orderBy('id', 'asc').get() //id、昇順
-    .then((snapshots) => {
+    .then((querySnapshot) => {
       const productList = [];
-      snapshots.forEach((snapshots) => {
-        const product = snapshots.data();
+      querySnapshot.forEach((querySnapshot) => {
+        const product = querySnapshot.data();
         productList.push(product)
       });
       dispatch(fetchProductsAction(productList));
