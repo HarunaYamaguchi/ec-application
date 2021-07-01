@@ -16,14 +16,14 @@ const SignUp  = () => {
 
   const { register, handleSubmit, formState:{errors}} = useForm();
 
-  const onSubmit = (async(data) => {
-    console.log(data);
+  const onSubmit = (async(data, username) => {
+    // console.log(data);
 
-    auth.createUserWithEmailAndPassword(data.email, data.password, data.username)
+    auth.createUserWithEmailAndPassword(data.email, data.password)
        .then((result) => {
         const userState = result.user;
         const uid = userState.uid
-
+        
          if(userState) {
            const timestamp = FirebaseTimestamp.now();
            
@@ -32,12 +32,13 @@ const SignUp  = () => {
              email: data.email,
              uid: uid,
              updated_at: timestamp,
-             username: data.username,
+             username: username,
              password: data.password
             }
 
             db.collection(`users/${uid}/userInfo`).doc().set(userInitialData)
-            .then(async () => {
+              .then(async() => {
+              console.log('サインアップ')
               dispatch(push('/'));
               window.location.reload();
             });

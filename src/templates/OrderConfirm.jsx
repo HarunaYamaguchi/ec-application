@@ -45,7 +45,7 @@ const OrderConfirm = () => {
                 phoneNumber: data.phoneNumber,
                 payValueId: data.payValue,
                 // creditCard: data.creditCardNum,
-                totalPrice: Number(sumPrice.toLocaleString()),
+                totalPrice: sumPrice.toLocaleString(),
               });
             });
             dispatch(push('/orderfinished'));

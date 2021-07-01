@@ -81,7 +81,7 @@ const OrderLog = () => {
                                  {itemInfos.itemNum}個
                                 </TableCell>
                                 <TableCell>
-                                  <h3>合計金額:{order.totalPrice.toLocaleString()}円</h3>
+                                  <h3>合計金額:{order.totalPrice}円</h3>
                                 </TableCell>
                               </TableRow>
                             );

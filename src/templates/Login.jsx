@@ -46,7 +46,6 @@ const Login = () => {
   const { register, handleSubmit, formState:{ errors } } = useForm();
 
   const onSubmit = (async(data) => {
-
       auth.signInWithEmailAndPassword(data.email, data.password)
         .then((result) => {
           const userState = result.user;
@@ -55,15 +54,16 @@ const Login = () => {
           if(userState) {
             db.collection('users').doc(userId).collection('userInfo').get()
             .then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                const dataDb = doc.data()
+              querySnapshot.forEach(() => {
+                console.log(data);
 
                 dispatch(signInAction({
                   isSignedIn: true,
                   uid: userId,
-                  username: dataDb.username,
+                  username: data.username,
                 }));
 
+                console.log(data);
                 dispatch(push('/'));
                 window.location.reload();
               });
