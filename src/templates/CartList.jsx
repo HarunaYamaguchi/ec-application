@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const CartList = () => {
   const classes = useStyles();
   const dispatch = useDispatch()
@@ -39,7 +38,6 @@ const CartList = () => {
   const products = getProducts(selector);
   const uid = getUserId(selector);
   const [totalPrice, setTotalPrice] = useState(0)
-  // const handleLink = (path) => history.push(path)
 
  useEffect(() => {
    dispatch(fetchCart(uid))

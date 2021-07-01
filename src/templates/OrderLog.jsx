@@ -38,8 +38,8 @@ const OrderLog = () => {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell align="center">sy</TableCell>
                   <TableCell align="center">商品名</TableCell>
-                  <TableCell align="center">種類</TableCell>
                   <TableCell align="center">数量</TableCell>
                 </TableRow>
               </TableHead>
@@ -71,24 +71,22 @@ const OrderLog = () => {
                                     pathname: '/itemdetail',
                                     selectedItemId: product.id,
                                    }}
-                                    key={itemInfos.id}
+                                    key={itemInfos.itemId}
                                     >
                                     {product.name}
                                   </Link>
                                 </TableCell>
                                 <TableCell align="center"
-                                  key={itemInfos.id}>
+                                  key={itemInfos.itemId}>
                                  {itemInfos.itemNum}個
+                                </TableCell>
+                                <TableCell>
+                                  <h3>合計金額:{order.totalPrice.toLocaleString()}円</h3>
                                 </TableCell>
                               </TableRow>
                             );
                           })
                       })}
-                        <TableRow>
-                          <TableCell>
-                            <h3>合計金額:{order.totalPrice.toLocaleString()}円</h3>
-                          </TableCell>
-                        </TableRow>
                     </TableBody>
                   );
                 })

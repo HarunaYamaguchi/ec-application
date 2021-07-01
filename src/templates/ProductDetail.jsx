@@ -1,21 +1,18 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-// import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { getProducts,getSumPrice } from '../Reducks/products/selectors';
-// import { fetchSumPrice } from '../Reducks/products/Oparations'
+import { getProducts } from '../Reducks/products/selectors';
 import {addOrdersInfo} from '../Reducks/users/Operations';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import FormLabel from '@material-ui/core/FormLabel';
-// import RegisterButton from '../UIKit/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Button from '@material-ui/core/Button'

@@ -1,6 +1,4 @@
 import {db} from '../../firebase/index'
-// import {FirebaseTimestamp} from '../../firebase/index'
-// import { push } from "connected-react-router"
 import { fetchProductsAction, fetchSumPriceAction } from './Actions';
 
 

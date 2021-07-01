@@ -1,11 +1,11 @@
 import React,{useCallback,useState} from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import {TextInput,SelectBox} from '../UIKit';
 import RegisterButton from '../UIKit/Button';
 // import { saveProduct } from '../Reducks/products/Oparations';
 
 const ProductEdit = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');

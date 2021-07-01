@@ -34,7 +34,7 @@ const ProductList = () => {
   const [inputText, setInputText] = useState('')
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-  const products = getProducts(selector); //商品情報
+  const products = getProducts(selector);
   const uid = getUserId(selector);
   const orders = getOrders(selector);
   const classes = useStyles();

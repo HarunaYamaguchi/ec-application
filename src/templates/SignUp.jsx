@@ -84,7 +84,6 @@ const SignUp  = () => {
         })}
         helperText={errors.email && errors.email.message}
        />
-
       <TextField 
         variant="outlined"
         margin="normal"
@@ -119,7 +118,6 @@ const SignUp  = () => {
         })}
         helperText={errors.passwordConfirm && errors.passwordConfirm.message}    
        />
-
          <div>
             <RegisterButton align="center" label={'アカウント登録'} 
               onClick={handleSubmit(onSubmit)}>

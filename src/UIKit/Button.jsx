@@ -13,7 +13,6 @@ const useStyles = makeStyles({
   }
 })
 
-
 const RegisterButton = (props) => {
   const classes = useStyles();
     return (
