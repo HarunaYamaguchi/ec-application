@@ -30,7 +30,7 @@ const OrderLog = () => {
 
   return (
     <div>
-      {orders.filter((order) => order.status !== 0) !== 0 ? (
+      {orders.filter((order) => order.status !== 0).length !== 0 ? (
         <TableContainer>
           <h2 align="center">
             注文履歴
