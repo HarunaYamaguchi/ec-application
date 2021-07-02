@@ -1,17 +1,30 @@
 import React from 'react';
 import { RegisterButton } from '../UIKit';
 import { useHistory } from 'react-router';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() => ({
+  button: {
+    alignItems: 'center',
+    padding: '50px 20px'
+  }
+}));
 
 const OrderFinished = () => {
-  const history = useHistory();
+  const classes = useStyles()
   const handleLink = (path) => history.push(path)
+  const history = useHistory();
 
   return (
-    <div>
-      <h2 align="center">
+    <div align="center">
+      <h2>
         ご購入ありがとうございました！
       </h2>
-      <RegisterButton label={'メニューに戻る'} onClick={() => {handleLink('/')}} />
+      <h3>またのご利用をお待ちしております。</h3>
+      <div className={classes.button}>
+        <RegisterButton label={'メニューに戻る'}
+          onClick={() => {handleLink('/')}} />
+      </div>
     </div>
   )
 }

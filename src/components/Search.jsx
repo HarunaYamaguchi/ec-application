@@ -41,12 +41,15 @@ const Search = (props) =>  {
         placeholder="商品を検索"
         inputProps={{ 'aria-label': 'search google maps' }}
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={
+          (e) => setText(e.target.value)
+          // e.priventDefault()
+        }
       />
       <IconButton type="submit" className={classes.iconButton} 
         onClick={() => {
           props.setText(text)
-          setText('')
+          // setText('')
         }}
       aria-label="search">
         <SearchIcon />

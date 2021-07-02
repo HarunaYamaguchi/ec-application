@@ -157,10 +157,10 @@ useEffect(() => {
             </TableContainer>
           </div>
           <div>
-            <h3 align='center'>
+            <h3 align='right'>
               消費税：{Math.round(totalPrice * 0.1).toLocaleString()}円
             </h3>
-            <h3 align='center'>
+            <h3 align='right'>
               合計金額：{Math.round(totalPrice * 1.1).toLocaleString()}円
             </h3>
           </div>

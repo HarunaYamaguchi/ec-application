@@ -10,7 +10,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import Search from '../components/Search';
+// import Search from '../components/Search';
 import { fetchCart } from '../Reducks/users/Operations';
 
 const useStyles = makeStyles(((theme) => ({
@@ -62,7 +62,7 @@ const ProductList = () => {
   
     return (
       <>
-      <Search setText={setInputText} />
+      {/* <Search setText={setInputText} /> */}
         <div className={classes.flex}>
           {products === undefined 
           ? ''

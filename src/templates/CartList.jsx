@@ -17,7 +17,7 @@ import { getUserId } from '../Reducks/users/Selectors';
 import { fetchProducts } from '../Reducks/products/Oparations';
 import { fetchOrders } from '../Reducks/users/Operations';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     margin: '0 auto',
     maxWidth: 512,
@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
   },
+  button: {
+    alignItem: 'right',
+    padding: 'auto 50px'
+  }
 }));
 
 const CartList = () => {
@@ -78,7 +82,7 @@ useEffect(() => {
 })
 
   return (
-    <div className='cartList'>
+    <div align='center'>
       <h2 align='center'>ショッピングカート</h2>
         {orders === null ? (
           ''
@@ -162,20 +166,22 @@ useEffect(() => {
             </TableContainer>
           </div>
           <div>
-            <h3 align='center'>
+            <h2 align='center'>
               消費税：{Math.round(totalPrice * 0.1).toLocaleString()}円
-            </h3>
-            <h3 align='center'>
+            </h2>
+            <h2 align='center'>
               合計金額：{Math.round(totalPrice * 1.1).toLocaleString()}円
-            </h3>
+            </h2>
           </div>
           <div>
-            {location.pathname === '/cartlist' ? (
-              <RegisterButton label={'注文確認画面へ進む'} 
-                onClick={() => history.push('/orderconfirm',{
-                sumPrice: Math.round(totalPrice * 1.1)
-              })}
-              />
+              {location.pathname === '/cartlist' ? (
+                <div className={classes.button}>
+                  <RegisterButton label={'注文確認画面へ進む'}
+                    onClick={() => history.push('/orderconfirm',{
+                    sumPrice: Math.round(totalPrice * 1.1)
+                  })}
+                  />
+                </div>
             ):(
               <></>
             )}

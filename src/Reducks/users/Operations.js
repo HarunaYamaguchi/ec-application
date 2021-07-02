@@ -101,7 +101,7 @@ export const listenAuthState = () => {
             });
           });
       } else {
-        dispatch(push('/login'));
+        dispatch(push('/signup'));
       }
     });
   };

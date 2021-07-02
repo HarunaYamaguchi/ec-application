@@ -8,8 +8,17 @@ import {auth,db,FirebaseTimestamp} from '../firebase/index';
 import { signUpAction } from "../Reducks/users/Actions";
 import { useDispatch } from "react-redux";
 import { push } from 'connected-react-router';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() => ({
+  button: {
+    alignItems: 'center',
+    padding: '30px auto'
+  }
+}));
 
 const SignUp  = () => {
+  const classes = useStyles()
   const dispatch = useDispatch();
   const history = useHistory();
   const handlePage = (path) => history.push(path);
@@ -46,7 +55,7 @@ const SignUp  = () => {
     })
 
   return (
-    <div>
+    <div align="center">
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 align="center">アカウント登録</h2>
       <div>
@@ -118,7 +127,7 @@ const SignUp  = () => {
         helperText={errors.passwordConfirm && errors.passwordConfirm.message}    
        />
          <div>
-            <RegisterButton align="center" label={'アカウント登録'} 
+            <RegisterButton align="center" label={'アカウント登録'} className={classes.button}
               onClick={handleSubmit(onSubmit)}>
             </RegisterButton>
          </div>

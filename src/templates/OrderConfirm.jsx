@@ -8,9 +8,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import {db,FirebaseTimestamp} from '../firebase/index'
 import { push } from 'connected-react-router';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() => ({
+  button: {
+    alignItems: 'center',
+    padding: '30px'
+  }
+}));
 
 const OrderConfirm = () => {
-  const dispatch = useDispatch()
+  const classes = useStyles();
+  const dispatch = useDispatch();
   
   const selector = useSelector((state) => state);
   const uid = getUserId(selector);
@@ -61,7 +70,7 @@ const OrderConfirm = () => {
           <CartListItem />
         </div>
         <div className="center">
-          <h2 align="center">お届け先情報入力</h2>
+          <h2 align="center">〜お届け先情報入力〜</h2>
             <Box align="center" >
               <Box mt={2}>
                 <TextField 
@@ -140,6 +149,7 @@ const OrderConfirm = () => {
                 />
               </Box>
               <Box mt={2}>
+                 お支払い方法：
                   <Controller
                         render={
                           ({ field }) => <Select {...field}>
@@ -161,12 +171,12 @@ const OrderConfirm = () => {
                               />
                           ) : ('')} */}
               </Box>
+              <div className={classes.button}>
+                <RegisterButton label={'注文を確定する'}
+                  onClick={handleSubmit(onSubmit)}            
+                  />
+                </div>
             </Box>
-        </div>
-        <div>
-        <RegisterButton label={'注文を確定する'}
-          onClick={handleSubmit(onSubmit)}            
-           />
         </div>
       </form>
     </div>

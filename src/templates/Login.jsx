@@ -1,9 +1,8 @@
 import React from 'react';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useForm } from "react-hook-form";
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import RegisterButton  from '../UIKit/Button';
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     alignItems: 'center',
-    padding: '30px auto'
+    margin: '20px 70px'
   }
 }));
 
@@ -49,13 +48,19 @@ const Login = () => {
       auth.signInWithEmailAndPassword(data.email, data.password)
         .then((result) => {
           const userState = result.user;
+          if (!userState) {
+            throw new Error('ユーザーIDを取得できません');
+          }
           const userId = userState.uid;
 
           if(userState) {
             db.collection('users').doc(userId).collection('userInfo').get()
             .then((querySnapshot) => {
               querySnapshot.forEach(() => {
-                console.log(data);
+
+                if (!data) {
+                  throw new Error('ユーザーデータが存在しません');
+                }
 
                 dispatch(signInAction({
                   isSignedIn: true,
@@ -63,7 +68,6 @@ const Login = () => {
                   username: data.username,
                 }));
 
-                console.log(data);
                 dispatch(push('/'));
                 window.location.reload();
               });
@@ -74,9 +78,8 @@ const Login = () => {
   
   return (
     <Container component="main" maxWidth="xs">
-    <CssBaseline />
     <div className={classes.paper}>
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h5" align="center">
         ログイン
       </Typography>
       <div className={classes.form}>
@@ -116,9 +119,12 @@ const Login = () => {
             })}
             helperText={errors.password && errors.password.message}    
           />
-          <RegisterButton label={'ログイン'} className={classes.button}
-            onClick={handleSubmit(onSubmit)}
-          />
+          <div className={classes.button}>
+            <RegisterButton 
+              label={'ログイン'}
+              onClick={handleSubmit(onSubmit)}
+            />
+          </div>
         </form>
       </div>
       <Link to="/signup"
