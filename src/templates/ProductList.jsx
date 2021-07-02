@@ -15,7 +15,7 @@ import { fetchCart } from '../Reducks/users/Operations';
 
 const useStyles = makeStyles(((theme) => ({
   root: {
-    maxWidth: 370,
+    maxWidth: 400,
     margin: 20,
   },
   flex: {
@@ -23,10 +23,6 @@ const useStyles = makeStyles(((theme) => ({
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
-  image: {
-    width: 200,
-    height:150
-  }
 })
 ))
 
@@ -81,7 +77,7 @@ const ProductList = () => {
                     image={product.imagePath}
                     title="Contemplative Reptile"
                     width='500'
-                    height='300'
+                    height='400'
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
