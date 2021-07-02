@@ -24,13 +24,13 @@ const Router = () => {
             <Route exact path='/login' component={Login} />
 
               <Auth>
+              <Route exact path='(/)?' component={ProductList} />
                 <Route exact path='/orderlog' component={OrderLog} />
                 <Route exact path='/orderfinished' component={OrderFinished} />
                 <Route exact path='/orderconfirm' component={OrderConfirm} />
                 <Route exact path='/cartlist' component={CartList} />
                 <Route exact path='/productdetail' component={ProductDetail} />
                 {/* <Route exact path='/product/edit' component={ProductEdit} />  */}
-                <Route exact path='(/)?' component={ProductList} />
               </Auth>
           </Switch>
       </BrowserRouter>

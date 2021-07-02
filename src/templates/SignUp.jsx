@@ -14,11 +14,10 @@ const SignUp  = () => {
   const history = useHistory();
   const handlePage = (path) => history.push(path);
 
-  const { register, handleSubmit, formState:{errors}} = useForm();
+  const { register, handleSubmit, formState:{errors} } = useForm();
 
-  const onSubmit = (async(data, username) => {
-    // console.log(data);
-
+  const onSubmit = (async(data) => {
+    
     auth.createUserWithEmailAndPassword(data.email, data.password)
        .then((result) => {
         const userState = result.user;
@@ -32,13 +31,12 @@ const SignUp  = () => {
              email: data.email,
              uid: uid,
              updated_at: timestamp,
-             username: username,
+             username: data.name,
              password: data.password
             }
 
             db.collection(`users/${uid}/userInfo`).doc().set(userInitialData)
-              .then(async() => {
-              console.log('サインアップ')
+              .then(async () => {
               dispatch(push('/'));
               window.location.reload();
             });
